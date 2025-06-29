@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.childscheduler", // ★ 2단계에서 정한 패키지 이름
+    "sha256_cert_fingerprints":
+    ["A1:69:63:36:8B:BF:F4:4C:A4:7F:AF:81:A2:3C:4F:58:25:1A:69:DD:6A:3B:02:C4:33:48:9B:DE:B3:4A:8B:25"] // ★ 3.2에서 복사한 값
+  }
+}]
