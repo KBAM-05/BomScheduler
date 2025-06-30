@@ -233,7 +233,7 @@
                     { time: '오후 6:00', activity: '개별 학습: 수학', description: '숫자와 도형을 재미있게 배워요.', category: '학습', icon: '📚', completed: false },
                     { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁을 먹으며 도란도란 이야기해요.', category: '기본생활', icon: '🍽️', completed: false },
                     { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업에 참여하며 새로운 것을 배워요.', category: '외부수업', icon: '🏫', completed: false },
-                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '�', completed: false },
+                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '🎉', completed: false },
                     { time: '오후 9:00', activity: '내일 학습 준비물 확인', description: '내일 필요한 학습 도구를 확인해요.', category: '기본생활', icon: '📝', completed: false },
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                     { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
@@ -283,7 +283,7 @@
                     { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
                     { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
                     { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 5:00', activity: '사회성 수업 (외부)', description: '친구들과 어울리는 방법을 배우는 시간이에요.', category: '치료', icon: '🧑‍🤝‍🧑', completed: false },
+                    { time: '오후 5:00', activity: '사회성 수업 (외부)', description: '친구들과 어울리는 방법을 배우는 시간이에요.', category: '치료', icon: '🧑‍🤝‍�', completed: false },
                     { time: '오후 6:00', activity: '키즈카페에서 신나게 놀기', description: '에너지를 발산하며 즐거운 시간을 보내요.', category: '놀이', icon: '🤸', completed: false },
                     { time: '오후 7:00', activity: '간식 및 자유시간', description: '신나게 놀고 와서 간단한 간식을 먹어요.', category: '휴식', icon: '🍎', completed: false },
                     { time: '오후 7:30', activity: '집 도착 및 저녁 식사', description: '신나게 놀고 와서 먹는 저녁은 꿀맛이에요.', category: '기본생활', icon: '🍽️', completed: false },
@@ -294,8 +294,8 @@
                 ],
                 '토': [
                     { time: '오전 9:00', activity: '기상 및 아침 식사', description: '주말 아침, 상쾌하게 시작해요!', category: '기본생활', icon: '☀️', completed: false },
-                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 학습해요.', category: '학습', icon: '📚', completed: false },
-                    { time: '오전 10:40', activity: '함께 책 읽기', description: '흥미로운 이야기를 함께 읽으며 상상력을 키워요.', category: '독서', icon: '📖', completed: false },
+                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 복습해요.', category: '학습', icon: '📚', completed: false },
+                    { time: '오전 10:40', activity: '함께 책 읽기', description: '아이가 좋아하는 책을 함께 읽으며 상상력을 키워요.', category: '독서', icon: '📖', completed: false },
                     { time: '오전 11:30', activity: '자유 놀이 또는 야외 활동', description: '아이가 좋아하는 놀이를 하거나, 가까운 공원에서 신체 활동을 즐겨요.', category: '놀이', icon: '🪁', completed: false },
                     { time: '오후 12:30', activity: '점심 식사', description: '맛있는 점심을 먹고 에너지를 충전해요.', category: '기본생활', icon: '🍽️', completed: false },
                     { time: '오후 2:00', activity: '부모님과 특별 활동/치료 훈련', description: '아이에게 필요한 맞춤형 훈련(소근육, 인지, 언어 등)을 놀이처럼 진행하거나, 함께 특별한 활동을 해요.', category: '치료', icon: '🧩', completed: false },
@@ -359,10 +359,11 @@
                             Object.keys(scheduleData).forEach(day => {
                                 if (parsedData[day]) {
                                     scheduleData[day].forEach((item, index) => {
+                                        // Merge properties from parsedData, but prioritize script-defined persistentAlert
                                         if (parsedData[day][index]) {
                                             Object.assign(item, parsedData[day][index]);
                                         }
-                                        // Ensure persistentAlert is true for specific morning activities
+                                        // Ensure persistentAlert is true for specific morning activities, overriding saved state if necessary
                                         if (item.time === '오전 7:40' || item.time === '오전 8:15') {
                                             item.persistentAlert = true;
                                         }
@@ -718,13 +719,13 @@
                             }
                             renderWeeklyChart(); 
                             if (item.persistentAlert) { 
-                                lastAnnouncedActivity = null;
-                                updateCurrentActivityHighlight(); 
+                                lastAnnouncedActivity = null; // Clear last announced for persistent alerts upon completion
+                                updateCurrentActivityHighlight(); // Re-evaluate immediately
                             }
                         });
                     }
                 });
-                // updateCurrentActivityHighlight() is called by the interval, no need to call immediately after renderSchedule
+                // No immediate call to updateCurrentActivityHighlight() here, as setInterval handles it
             }
 
             let activeExploreDay = null; 
