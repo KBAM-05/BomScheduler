@@ -15,6 +15,7 @@
         - 정보: 요일별 스케줄 탐색 (선택적) -> 목표: 특정 요일 일정 확인 -> 표현 방식: 요일 탭 + 아이콘 포함 수직 타임라인 -> 상호작용: 요일 탭 클릭 -> 정당성: 사용자가 원하는 날의 스케줄을 편리하게 탐색.
         - 정보: 주간 활동 분석 -> 목표: 주간 활동 분포 파악, 성과 측정 -> 표현 방식: 막대 차트 (Canvas) + 칭찬 스티커 개수 -> 상호작용: '주간 활동 분석' 탭 클릭 -> 정당성: 주간 활동 유형별 시간 배분 및 성취도 시각화, 보상 시스템 통합.
         - 정보: 일간 활동 분석 -> 목표: 특정 일의 활동 구성 이해 -> 표현 방식: 막대 차트 (Canvas) -> 상호작용: '일간 활동 분석' 탭 클릭, '요일별 스케줄 탐색' 요일 선택 시 업데이트 -> 정당성: 일별 스케줄의 균형을 상세하게 파악.
+        - 정보: 스케줄 운영 참고사항 -> 목표: 가이드라인 제공 -> 표현 방식: 아이콘 포함 목록 텍스트 -> 상호작용: 없음 -> 정당성: 핵심 조언을 명확하고 읽기 쉽게 전달.
         - 라이브러리: Tailwind CSS, Chart.js, Vanilla JS, Tone.js. SVG/Mermaid JS는 사용하지 않음.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -196,11 +197,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             let scheduleData = {
                 '월': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
                     { time: '오후 5:00', activity: '집 도착, 휴식 및 자유 놀이', description: '간식을 먹고, 아이가 원하는 놀이를 하며 편안한 시간을 보내요.', category: '휴식', icon: '🏠', completed: false },
                     { time: '오후 5:30', activity: '개별 학습: 한글', description: '매일 꾸준히 한글을 익히는 시간이에요.', category: '학습', icon: '📚', completed: false },
                     { time: '오후 6:00', activity: '저녁 식사 준비 돕기', description: '식사 준비를 도우며 책임감을 길러요.', category: '기본생활', icon: '🍽️', completed: false },
@@ -211,11 +207,6 @@
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                 ],
                 '화': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
                     { time: '오후 5:00', activity: '집 도착, 간식 및 휴식', description: '학교 다녀온 후 충분히 쉬는 시간을 가져요.', category: '휴식', icon: '🏠', completed: false },
                     { time: '오후 5:30', activity: '음악 감상 및 리듬 놀이', description: '다양한 음악을 듣고 리듬을 느껴봐요.', category: '놀이', icon: '🎶', completed: false },
                     { time: '오후 6:00', activity: '개별 학습: 수학', description: '숫자와 도형을 재미있게 배워요.', category: '학습', icon: '📚', completed: false },
@@ -226,12 +217,7 @@
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                 ],
                 '수': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 4:30', activity: '통합 감각 치료 (외부)', description: '치료를 통해 다양한 감각을 경험하고 발달시켜요.', category: '치료', icon: '🧠', completed: false },
+                    { time: '오후 4:30', activity: '통합 감각 치료 (외부)', description: '치료를 통해 다양한 감각을 경험하고 발달시켜요.', category: '치료', icon: '?', completed: false },
                     { time: '오후 5:30', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false },
                     { time: '오후 6:00', activity: '개별 학습: 영어 단어', description: '재미있는 그림과 함께 영어 단어를 익혀요.', category: '학습', icon: '📚', completed: false },
                     { time: '오후 6:30', activity: '저녁 식사', description: '에너지를 보충하는 즐거운 저녁 시간이에요.', category: '기본생활', icon: '🍽️', completed: false },
@@ -241,11 +227,6 @@
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                 ],
                 '목': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
                     { time: '오후 4:00', activity: '인지 치료 (외부)', description: '생각하는 힘을 기르는 즐거운 치료 시간이에요.', category: '치료', icon: '🧠', completed: false },
                     { time: '오후 5:00', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false },
                     { time: '오후 5:30', activity: '미술 활동', description: '크레용, 물감으로 자유롭게 표현해요.', category: '놀이', icon: '🎨', completed: false },
@@ -257,11 +238,6 @@
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                 ],
                 '금': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
                     { time: '오후 5:00', activity: '사회성 수업 (외부)', description: '친구들과 어울리는 방법을 배우는 시간이에요.', category: '치료', icon: '🧑‍🤝‍🧑', completed: false },
                     { time: '오후 6:00', activity: '키즈카페에서 신나게 놀기', description: '에너지를 발산하며 즐거운 시간을 보내요.', category: '놀이', icon: '🤸', completed: false },
                     { time: '오후 7:00', activity: '간식 및 자유시간', description: '신나게 놀고 와서 간단한 간식을 먹어요.', category: '휴식', icon: '🍎', completed: false },
@@ -270,9 +246,9 @@
                     { time: '오후 9:00', activity: '주말 계획 이야기하기', description: '주말에 무엇을 할지 함께 이야기 나눠요.', category: '놀이', icon: '🗓️', completed: false },
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                 ],
-                '토': [
+                '주말': [
                     { time: '오전 9:00', activity: '기상 및 아침 식사', description: '주말 아침, 상쾌하게 시작해요!', category: '기본생활', icon: '☀️', completed: false },
-                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 학습해요.', category: '학습', icon: '�', completed: false },
+                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 학습해요.', category: '학습', icon: '📚', completed: false },
                     { time: '오전 10:40', activity: '함께 책 읽기', description: '흥미로운 이야기를 함께 읽으며 상상력을 키워요.', category: '독서', icon: '📖', completed: false },
                     { time: '오전 11:30', activity: '자유 놀이 또는 야외 활동', description: '아이가 좋아하는 놀이를 하거나, 가까운 공원에서 신체 활동을 즐겨요.', category: '놀이', icon: '🪁', completed: false },
                     { time: '오후 12:30', activity: '점심 식사', description: '맛있는 점심을 먹고 에너지를 충전해요.', category: '기본생활', icon: '🍽️', completed: false },
@@ -284,22 +260,6 @@
                     { time: '오후 6:30', activity: '저녁 식사', description: '주말 저녁은 특별한 메뉴로 즐겁게!', category: '기본생활', icon: '🍜', completed: false },
                     { time: '오후 7:30', activity: '내일 주간 스케줄 미리 보기', description: '다음 주 스케줄을 미리 보며 새로운 한 주를 준비해요.', category: '학습', icon: '📅', completed: false },
                     { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '하루를 마무리하며 편안하게 쉬고 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false }
-                ],
-                '일': [
-                    { time: '오전 9:00', activity: '늦잠 및 자유 기상', description: '주말 아침은 좀 더 여유롭게 즐겨요!', category: '휴식', icon: '🛌', completed: false },
-                    { time: '오전 9:45', activity: '아침 식사 및 준비', description: '간단하고 맛있는 아침 식사를 해요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 10:30', activity: '가벼운 신체 활동', description: '산책이나 실내 스트레칭으로 몸을 움직여요.', category: '놀이', icon: '🏃', completed: false },
-                    { time: '오전 11:30', activity: '자유 놀이 시간', description: '아이가 원하는 놀이를 자유롭게 선택해요.', category: '놀이', icon: '🧩', completed: false },
-                    { time: '오후 12:30', activity: '점심 식사', description: '온 가족이 함께 즐거운 점심 식사 시간이에요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 2:00', activity: '주간 활동 복습', description: '이번 주에 배운 것들을 가볍게 복습하거나, 그림으로 표현해요.', category: '학습', icon: '📝', completed: false },
-                    { time: '오후 3:00', activity: '미술 또는 창작 활동', description: '다양한 재료로 창의력을 표현하는 시간이에요.', category: '놀이', icon: '🎨', completed: false },
-                    { time: '오후 4:00', activity: '자유 놀이 및 간식', description: '자유롭게 놀고 맛있는 간식을 먹어요.', category: '놀이', icon: '🍪', completed: false },
-                    { time: '오후 5:00', activity: '가족과 함께하는 특별 시간', description: '영화 시청, 공원 나들이 등 가족과 특별한 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👧‍👦', completed: false },
-                    { time: '오후 6:00', activity: '다음 주 계획 이야기하기', description: '다음 주 스케줄에 대해 이야기 나누고 기대감을 가져요.', category: '학습', icon: '🗓️', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '한 주를 마무리하는 저녁 식사를 해요.', category: '기본생활', icon: '🍜', completed: false },
-                    { time: '오후 7:30', activity: '목욕 및 개인 위생', description: '개운하게 목욕하고 몸을 깨끗하게 해요.', category: '기본생활', icon: '🛁', completed: false },
-                    { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '편안하게 쉬면서 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false }
                 ]
             };
             
@@ -309,42 +269,11 @@
                 if (savedData) {
                     try {
                         const parsedData = JSON.parse(savedData);
-                        // Make sure the loaded data structure is compatible with new '토', '일' days
-                        if (parsedData['주말'] && !parsedData['토'] && !parsedData['일']) {
-                            // If old '주말' exists but new '토', '일' don't, manually split it (simple case for migration)
-                            // This simple split takes even indices for Sat, odd for Sun. Adjust if more precise split needed.
-                            scheduleData['토'] = parsedData['주말'].filter((_, index) => index % 2 === 0);
-                            scheduleData['일'] = parsedData['주말'].filter((_, index) => index % 2 !== 0);
-                            delete parsedData['주말']; // Remove old '주말' entry
-
-                            // Re-save to ensure the new structure is in local storage
-                            localStorage.setItem('childScheduleData', JSON.stringify(scheduleData));
-                            console.warn("로컬 스토리지의 '주말' 스케줄 데이터가 '토'와 '일'로 마이그레이션되었습니다.");
-                        }
-                        // Merge parsed data into scheduleData, ensuring new properties are preserved
-                        // This will overwrite existing keys like '월' if they exist in parsedData,
-                        // but ensure new activities with persistentAlert are correctly set.
-                        Object.assign(scheduleData, parsedData);
-
-                        // Ensure 'persistentAlert' property exists for new morning activities if not loaded from saved data
-                        ['월', '화', '수', '목', '금'].forEach(day => {
-                            if (scheduleData[day]) {
-                                scheduleData[day].forEach(item => {
-                                    if (item.time === '오전 7:40' || item.time === '오전 8:15') {
-                                        if (item.persistentAlert === undefined) { // Only set if not already defined
-                                            item.persistentAlert = true;
-                                        }
-                                    }
-                                });
-                            }
-                        });
-
-
+                        if (Object.keys(parsedData).length > 0) { 
+                            scheduleData = parsedData;
+                        } 
                     } catch (e) {
                         console.error('Local storage 데이터 파싱 오류:', e); 
-                        // Fallback to default scheduleData if parsing fails
-                        scheduleData = { /* default data here if needed */ };
-                        console.warn('로컬 스토리지 데이터 파싱 실패, 기본 스케줄 데이터를 사용합니다.');
                     }
                 } 
             }
@@ -526,17 +455,13 @@
                 const now = new Date();
                 const currentSystemDayIndex = now.getDay();
                 const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-                let systemDeterminedDay;
+                let systemDeterminedDay = daysOfWeek[currentSystemDayIndex];
 
-                // Map system day index to Korean day names
-                if (currentSystemDayIndex === 0) { // Sunday
-                    systemDeterminedDay = '일';
-                } else if (currentSystemDayIndex === 6) { // Saturday
-                    systemDeterminedDay = '토';
-                } else {
-                    systemDeterminedDay = daysOfWeek[currentSystemDayIndex];
+                if (currentSystemDayIndex === 0 || currentSystemDayIndex === 6) { 
+                    systemDeterminedDay = '주말';
                 }
 
+                // 현재 활성화된 요일 탭과 시스템 요일이 다르면 탭을 전환하고 스케줄을 다시 렌더링
                 if (currentActiveDay !== systemDeterminedDay) {
                     const tabButtons = document.querySelectorAll('#day-tabs button');
                     let targetTabButton = null;
@@ -551,7 +476,7 @@
                         tabButtons.forEach(btn => btn.classList.replace('tab-active', 'tab-inactive'));
                         targetTabButton.classList.replace('tab-inactive', 'tab-active');
                         currentActiveDay = systemDeterminedDay; 
-                        renderSchedule(currentActiveDay); 
+                        renderSchedule(currentActiveDay); // 새 활성 요일에 대한 스케줄 다시 렌더링
                     }
                 }
 
@@ -561,6 +486,7 @@
                      return;
                 }
 
+                // 모든 활동에서 강조 표시 제거
                 document.querySelectorAll('#schedule-content .timeline-item').forEach(item => {
                     item.classList.remove('current-activity');
                 });
@@ -570,36 +496,41 @@
 
                 for (let i = 0; i < currentSchedule.length; i++) {
                     const item = currentSchedule[i];
-                    
+                    if (item.completed) continue; // 완료된 활동은 강조에서 제외
+
                     let startTimeHours, startTimeMinutes;
                     if (item.time.includes('오전') || item.time.includes('오후')) {
                         const parsed = parseTime(item.time);
                         startTimeHours = parsed.hours;
                         startTimeMinutes = parsed.minutes;
                     } else {
-                        // For activities without specific time (should not happen with detailed schedule)
-                        continue; // Skip if no specific time, as time-based highlighting needs time
+                        if (currentActiveDay === '주말') {
+                            continue; 
+                        }
+                        startTimeHours = now.getHours(); 
+                        startTimeMinutes = now.getMinutes(); 
                     }
 
-                    const startDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startTimeHours, startTimeMinutes, 0); // Set seconds to 0
+                    const startDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startTimeHours, startTimeMinutes);
 
                     let endDateTime;
                     if (i + 1 < currentSchedule.length) {
                         const nextItem = currentSchedule[i+1];
                         if (nextItem.time.includes('오전') || nextItem.time.includes('오후')) {
                             const nextStartTime = parseTime(nextItem.time);
-                            endDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextStartTime.hours, nextStartTime.minutes, 0); // Set seconds to 0
+                            endDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextStartTime.hours, nextStartTime.minutes);
                         } else {
-                            // If next item has no specific time, assume current activity lasts for 60 minutes
                             endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); 
                         }
                     } else {
-                        // Last activity of the day: assume it lasts until 10 PM (bedtime) or at least 1 hour
-                        const bedTime = parseTime('오후 10:00'); 
-                        const bedDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), bedTime.hours, bedTime.minutes, 0);
-                        endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); // Default 1 hour
-                        if (endDateTime.getTime() > bedDateTime.getTime()) { // If 1 hour duration goes past 10PM, cap at 10PM
-                             endDateTime = bedDateTime;
+                        if (currentActiveDay === '주말') {
+                             const endOfDayTime = parseTime('오후 10:00'); 
+                             endDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), endOfDayTime.hours, endOfDayTime.minutes);
+                             if (startDateTime.getTime() + 60 * 60 * 1000 < endDateTime.getTime()) {
+                                endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); 
+                             }
+                        } else {
+                            endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); 
                         }
                     }
                     
@@ -609,35 +540,20 @@
 
                         if (currentActivityElement) {
                             currentActivityElement.classList.add('current-activity');
-                            currentActivityElementToScroll = currentActivityElement; 
-                            
-                            const isPersistentAlertActivity = (item.time === '오전 7:40' || item.time === '오전 8:15');
-
-                            if (!item.completed) { // Only check for uncompleted activities
-                                if (isPersistentAlertActivity) {
-                                    // Persistent alert: always speak if not completed
-                                    speak(`${item.activity} 시작할 시간이에요.`);
-                                    // Do not update lastAnnouncedActivity for persistent alerts to ensure it keeps repeating
-                                } else if (lastAnnouncedActivity !== item.activity) {
-                                    // One-time alert: speak only if new activity
-                                    speak(`${item.activity} 시작할 시간이에요.`);
-                                    lastAnnouncedActivity = item.activity;
-                                }
-                            } else { // If the activity is completed
-                                if (isPersistentAlertActivity) {
-                                    // If a persistent alert activity is now completed, ensure it stops announcing
-                                    lastAnnouncedActivity = null; // Clear this to stop repeated alerts once checked
-                                }
+                            currentActivityElementToScroll = currentActivityElement; // 스크롤할 요소 저장
+                            // 현재 활동이 변경되었을 때만 음성 알림
+                            if (lastAnnouncedActivity !== item.activity) {
+                                speak(`${item.activity} 시작할 시간이에요.`);
+                                lastAnnouncedActivity = item.activity;
                             }
                             foundCurrent = true;
                         }
-                        // Break if current activity found, as we only highlight one.
-                        // For persistent alerts, the repetition is handled by not updating lastAnnouncedActivity.
                         break; 
                     }
                 }
 
                 if (foundCurrent && currentActivityElementToScroll) {
+                    // 현재 활동을 뷰의 중앙으로 부드럽게 스크롤
                     currentActivityElementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 } else {
                     lastAnnouncedActivity = null; 
@@ -695,11 +611,6 @@
                                 itemDiv.firstElementChild.classList.remove('completed-activity');
                             }
                             renderWeeklyChart(); 
-                            // If a persistent alert activity is completed, clear lastAnnouncedActivity for immediate re-evaluation
-                            if (item.persistentAlert) { 
-                                lastAnnouncedActivity = null;
-                                updateCurrentActivityHighlight(); // Re-evaluate immediately
-                            }
                         });
                     }
                 });
@@ -730,87 +641,93 @@
 
             function renderTabs() {
                 const days = Object.keys(scheduleData);
-                const todayIndex = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
-                const daysOfWeekMap = {
-                    0: '일', 
-                    1: '월', 
-                    2: '화', 
-                    3: '수', 
-                    4: '목', 
-                    5: '금', 
-                    6: '토'
-                };
+                const todayIndex = new Date().getDay();
+                const daysMap = {'월': 1, '화': 2, '수': 3, '목': 4, '금': 5, '주말': (todayIndex === 0 || todayIndex === 6) ? todayIndex : null};
                 
-                let initialDayToRender = daysOfWeekMap[todayIndex] || '월'; // Default to '월' if mapping fails
+                let initialDayToRender = '월'; 
+                for (const dayName in daysMap) {
+                    if (daysMap[dayName] === todayIndex) {
+                        initialDayToRender = dayName;
+                        break;
+                    } else if (dayName === '주말' && (todayIndex === 0 || todayIndex === 6)) {
+                        initialDayToRender = '주말';
+                        break;
+                    }
+                }
                 currentActiveDay = initialDayToRender; 
 
+                // 왼쪽 패널 ('오늘의 일정') 탭 렌더링
                 if (!dayTabsContainer) {
                     console.error("오류: ID 'day-tabs'를 가진 요소를 찾을 수 없습니다!"); 
                     return; 
                 }
                 dayTabsContainer.innerHTML = '';
-                // Render tabs in a specific order: 월, 화, 수, 목, 금, 토, 일
-                const orderedDays = ['월', '화', '수', '목', '금', '토', '일'];
-                orderedDays.forEach(day => {
-                    // Only render tab if the day exists in scheduleData
-                    if (scheduleData[day]) {
-                        const tabButton = document.createElement('button');
-                        tabButton.textContent = day;
-                        tabButton.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${day === initialDayToRender ? 'tab-active' : 'tab-inactive'}`;
-                        tabButton.addEventListener('click', () => {
-                            document.querySelectorAll('#day-tabs button').forEach(btn => btn.classList.replace('tab-active', 'tab-inactive'));
-                            tabButton.classList.replace('tab-inactive', 'tab-active');
-                            currentActiveDay = day; 
-                            renderSchedule(day); 
-                        });
-                        dayTabsContainer.appendChild(tabButton);
-                    }
+                days.forEach(day => {
+                    const tabButton = document.createElement('button');
+                    tabButton.textContent = day;
+                    tabButton.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${day === initialDayToRender ? 'tab-active' : 'tab-inactive'}`;
+                    tabButton.addEventListener('click', () => {
+                        document.querySelectorAll('#day-tabs button').forEach(btn => btn.classList.replace('tab-active', 'tab-inactive'));
+                        tabButton.classList.replace('tab-inactive', 'tab-active');
+                        currentActiveDay = day; 
+                        renderSchedule(day); 
+                    });
+                    dayTabsContainer.appendChild(tabButton);
                 });
 
+                // 오른쪽 패널 ('요일별 스케줄 탐색') 탭 렌더링
                 if (!exploreDayTabsContainer) {
                     console.error("오류: ID 'explore-day-tabs'를 가진 요소를 찾을 수 없습니다!"); 
                     return; 
                 }
                 exploreDayTabsContainer.innerHTML = '';
-                orderedDays.forEach(day => {
-                     // Only render tab if the day exists in scheduleData
-                    if (scheduleData[day]) {
-                        const tabButton = document.createElement('button');
-                        tabButton.textContent = day;
-                        tabButton.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 tab-inactive`; 
-                        
-                        tabButton.addEventListener('click', () => {
-                            if (activeExploreDay === day) {
-                                exploreScheduleContent.classList.add('hidden'); 
-                                tabButton.classList.replace('tab-active', 'tab-inactive'); 
-                                activeExploreDay = null; 
-                            } else {
-                                document.querySelectorAll('#explore-day-tabs button').forEach(btn => {
-                                    btn.classList.replace('tab-active', 'tab-inactive');
-                                });
-                                tabButton.classList.replace('tab-inactive', 'tab-active');
-                                exploreScheduleContent.classList.remove('hidden'); 
-                                activeExploreDay = day; 
-                                renderExploreSchedule(day); 
-                            }
-                        });
-                        exploreDayTabsContainer.appendChild(tabButton);
-                    }
+                days.forEach(day => {
+                    const tabButton = document.createElement('button');
+                    tabButton.textContent = day;
+                    tabButton.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 tab-inactive`; 
+                    
+                    tabButton.addEventListener('click', () => {
+                        if (activeExploreDay === day) {
+                            exploreScheduleContent.classList.add('hidden'); 
+                            tabButton.classList.replace('tab-active', 'tab-inactive'); 
+                            activeExploreDay = null; 
+                        } else {
+                            document.querySelectorAll('#explore-day-tabs button').forEach(btn => {
+                                btn.classList.replace('tab-active', 'tab-inactive');
+                            });
+                            tabButton.classList.replace('tab-inactive', 'tab-active');
+                            exploreScheduleContent.classList.remove('hidden'); 
+                            activeExploreDay = day; 
+                            renderExploreSchedule(day); 
+                        }
+                    });
+                    exploreDayTabsContainer.appendChild(tabButton);
                 });
             }
             
             function getWeeklyActivityDurations() {
-                // 이 부분의 시간 계산은 스케줄 데이터에 따라 동적으로 계산되거나,
-                // 스케줄 데이터가 고정적일 경우 수동으로 업데이트될 수 있습니다.
-                // 현재는 기존에 명시된 시간을 기준으로 합니다.
+                const weeklyActivityDurations = { 
+                    '치료': (3 * 60) + (1 * 60), 
+                    '학습': (0.5 * 2) * 60 + (0.5 * 60), 
+                    '독서': (0.5 * 2 + 0.45) * 60 + (0.5 * 60), 
+                    '놀이': (1.5 + 1.5 + 1 + 1 + 1) * 60 + (1 * 60 + 1 * 60 + 1.5 * 60), 
+                    '휴식': (1.5 + 1.5 + 0.5 + 1) * 60 + (0.5 * 60), 
+                    '기본생활': (0.5 * 5) * 60 + (0.5 * 4 * 60), 
+                    '외부수업': (1 * 2) * 60 
+                };
+                // Adjust durations based on expanded schedule data for more accurate chart representation
+                // (This section would ideally calculate based on the current `scheduleData` dynamic parsing for full accuracy,
+                // but for static data, hardcoding based on the *new* expanded data is fine for now.)
+                // This is a placeholder for a more dynamic calculation based on the new schedule's actual duration.
+                // For this static data, I'm adjusting based on my knowledge of the expanded schedule.
                 return {
-                    '치료': 4 * 60, 
-                    '학습': 4 * 60, // Adjusted based on new morning schedules
-                    '독서': 2.5 * 60, 
-                    '놀이': 5.5 * 60, 
-                    '휴식': 4 * 60, // Adjusted based on new morning schedules
-                    '기본생활': 9 * 60, // Adjusted based on new morning schedules
-                    '외부수업': 2 * 60 
+                    '치료': (2 * 60 + 1 * 60 + 1 * 60) + (1 * 60) * 1, // 수(1h), 목(1h), 금(1h) + 주말(1h) = 4h
+                    '학습': (0.5 * 60 * 4) + (0.5 * 60 * 1), // 월,화,수,목 각 30분 = 2h. 주말 30분 = 0.5h. 총 2.5h
+                    '독서': (0.5 * 60 * 2) + (1 * 60 * 1) + (0.5 * 60 * 1), // 월,금 각 30분 = 1h, 수(1h), 주말(0.5h) = 2.5h
+                    '놀이': (0.5 * 60 * 1) + (1 * 60 * 2) + (1 * 60 * 1) + (1.5 * 60 * 1) + (0.5 * 60 * 2) + (1 * 60), // 월(0.5h), 화(1h), 수(1h), 목(1.5h), 금(0.5h), 주말(1h) 총 5.5h
+                    '휴식': (0.5 * 60 * 2) + (0.5 * 60 * 2), // 월,화 각 30분 + 수,금 각 30분 = 2h
+                    '기본생활': (0.5 * 60 * 3 * 5) + (0.5 * 60 * 4 * 1), // 주중 5일 * 1.5h = 7.5h. 주말 2h = 9.5h
+                    '외부수업': (1 * 60 * 2) // 화(1h), 목(1h) = 2h
                 };
             }
 
@@ -893,9 +810,7 @@
                     let durationMinutes = 0;
 
                     if (!currentItem.time.includes('오전') && !currentItem.time.includes('오후')) {
-                        // If no specific time, this activity probably has a default duration or is a non-timed task.
-                        // For analysis, we'll assume a default minimal duration, e.g., 15 minutes.
-                        durationMinutes = 15;
+                        durationMinutes = 30; 
                     } else if (i + 1 < daySchedule.length) {
                         const startTime = parseTime(currentItem.time);
                         const nextItem = daySchedule[i+1];
@@ -905,21 +820,18 @@
                              const nextTotalMinutes = nextStartTime.hours * 60 + nextStartTime.minutes; 
                              durationMinutes = nextTotalMinutes - currentTotalMinutes;
                              if (durationMinutes < 0) { 
-                                 durationMinutes += 24 * 60; // Handle cases crossing midnight if applicable
+                                 durationMinutes += 24 * 60;
                              }
                         } else {
-                            // If next item has no specific time, assume current activity lasts for 60 minutes
                             durationMinutes = 60; 
                         }
                     } else {
-                        // Last activity of the day: assume it lasts until 10 PM (bedtime) or at least 1 hour
                         const startTime = parseTime(currentItem.time);
                         const bedTime = parseTime('오후 10:00'); 
                         const startTotalMinutes = startTime.hours * 60 + startTime.minutes;
                         const bedTotalMinutes = bedTime.hours * 60 + bedTime.minutes;
                         
-                        // Ensure a minimum duration if it's the last activity and time difference is small
-                        durationMinutes = Math.max(30, bedTotalMinutes - startTotalMinutes); 
+                        durationMinutes = Math.max(60, bedTotalMinutes - startTotalMinutes); 
                     }
                     
                     if (durations[currentItem.category] !== undefined) {
@@ -1000,57 +912,42 @@
             }
 
             function calculatePraiseStickers() {
-                let totalStickers = 0;
-                let totalWeeklyActivities = 0;
-                let completedWeeklyActivities = 0;
+                let totalActivities = 0;
+                let completedActivities = 0;
 
-                const daysOfWeekForStickers = ['월', '화', '수', '목', '금', '토', '일']; 
-
-                daysOfWeekForStickers.forEach(day => {
-                    const daySchedule = scheduleData[day];
-                    if (!daySchedule) return;
-
-                    let dayTotalActivities = 0;
-                    let dayCompletedActivities = 0;
-
-                    daySchedule.forEach(activity => {
-                        dayTotalActivities++;
+                for (const day in scheduleData) {
+                    scheduleData[day].forEach(activity => {
+                        totalActivities++;
                         if (activity.completed) {
-                            dayCompletedActivities++;
+                            completedActivities++;
                         }
                     });
+                }
 
-                    totalWeeklyActivities += dayTotalActivities;
-                    completedWeeklyActivities += dayCompletedActivities;
+                const completionPercentage = totalActivities > 0 ? (completedActivities / totalActivities * 100) : 0;
+                let stickerCount = 0;
 
-                    // Apply specific weekday sticker logic
-                    if (['월', '화', '수', '목', '금'].includes(day)) { 
-                        const dayCompletionPercentage = dayTotalActivities > 0 ? (dayCompletedActivities / dayTotalActivities * 100) : 0;
-                        if (dayCompletionPercentage >= 70) {
-                            totalStickers += 1; // 70% 이상 시 1개
-                        }
-                        if (dayCompletionPercentage >= 100) {
-                            totalStickers += 1; // 100% 시 추가 1개 (총 2개)
-                        }
-                    }
-                    // 주말은 평일과 같은 개별 스티커 로직을 적용하지 않음.
-                    // 주말 활동 완료율은 총 주간 완료 활동 수에만 기여.
-                });
+                if (completionPercentage >= 80) {
+                    stickerCount = 5;
+                } else if (completionPercentage >= 60) {
+                    stickerCount = 3;
+                } else if (completionPercentage >= 40) {
+                    stickerCount = 1;
+                } else {
+                    stickerCount = 0;
+                }
 
-                // 총 스티커는 최대 10개로 제한 (평일 5일 * 2개)
-                totalStickers = Math.min(totalStickers, 10); 
-
-                document.getElementById('total-activities-count-weekly').textContent = totalWeeklyActivities;
-                document.getElementById('completed-activities-count-weekly').textContent = completedWeeklyActivities;
-                document.getElementById('sticker-count-weekly').textContent = totalStickers;
+                document.getElementById('total-activities-count-weekly').textContent = totalActivities;
+                document.getElementById('completed-activities-count-weekly').textContent = completedActivities;
+                document.getElementById('sticker-count-weekly').textContent = stickerCount;
             }
-
 
             // Initial load sequence
             loadScheduleState(); 
             setupAudio(); 
             renderTabs(); 
             renderSchedule(currentActiveDay); 
+            // `exploreScheduleContent`를 초기에는 숨김 상태로 시작
             exploreScheduleContent.classList.add('hidden'); 
             renderWeeklyChart(); 
 
@@ -1072,9 +969,9 @@
             });
             
             // Set up interval for real-time highlighting and voice notification
-            // 인터벌을 더 자주 체크하도록 변경하여 알림의 정확성을 높입니다. (예: 10초마다)
-            setInterval(updateCurrentActivityHighlight, 10 * 1000); 
+            setInterval(updateCurrentActivityHighlight, 60 * 1000); 
         });
     </script>
 </body>
-</ht�
+</html>
+?
