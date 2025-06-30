@@ -122,7 +122,7 @@
                 <div class="lg:col-span-2">
                     <section id="daily-schedule" class="bg-white p-6 rounded-2xl shadow-lg mb-8">
                         <h2 class="text-2xl font-bold mb-4 text-[#3B666B]">오늘의 일정</h2>
-                        <p id="today-day-display" class="text-xl font-semibold text-gray-700 mb-6"></p> <!-- Added for current day display -->
+                        <p id="today-day-display-actual" class="text-xl font-semibold text-gray-700 mb-2"></p> <!-- Added for current day display -->
                         <p class="text-gray-600 mb-6">현재 시간을 기준으로 오늘 해야 할 활동을 확인하고, 완료 시 체크박스를 눌러주세요!</p>
                         <!-- '오늘의 일정' 요일 탭 제거됨 -->
                         <div id="schedule-content" class="space-y-6">
@@ -201,128 +201,124 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Default schedule data - this will always be the complete structure
             let scheduleData = {
                 '월': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
-                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 5:00', activity: '집 도착, 휴식 및 자유 놀이', description: '간식을 먹고, 아이가 원하는 놀이를 하며 편안한 시간을 보내요.', category: '휴식', icon: '🏠', completed: false },
-                    { time: '오후 5:30', activity: '개별 학습: 한글', description: '매일 꾸준히 한글을 익히는 시간이에요.', category: '학습', icon: '📚', completed: false },
-                    { time: '오후 6:00', activity: '저녁 식사 준비 돕기', description: '식사 준비를 도우며 책임감을 길러요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '온 가족이 함께 즐거운 식사 시간을 가져요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 7:30', activity: '함께 책 읽기', description: '아이의 상상력을 자극하는 재미있는 책을 함께 읽어요.', category: '독서', icon: '📖', completed: false },
-                    { time: '오후 8:00', activity: '자유 놀이 및 휴식', description: '아이가 좋아하는 활동으로 하루를 즐겁게 마무리해요.', category: '놀이', icon: '🎉', completed: false },
-                    { time: '오후 9:00', activity: '내일 준비물 챙기기', description: '내일 필요한 물건들을 미리 챙겨요.', category: '기본생활', icon: '🎒', completed: false },
-                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
+                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '집 도착, 휴식 및 자유 놀이', description: '간식을 먹고, 아이가 원하는 놀이를 하며 편안한 시간을 보내요.', category: '휴식', icon: '🏠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:30', activity: '개별 학습: 한글', description: '매일 꾸준히 한글을 익히는 시간이에요.', category: '학습', icon: '📚', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '저녁 식사 준비 돕기', description: '식사 준비를 도우며 책임감을 길러요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '온 가족이 함께 즐거운 식사 시간을 가져요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '함께 책 읽기', description: '아이의 상상력을 자극하는 재미있는 책을 함께 읽어요.', category: '독서', icon: '📖', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:00', activity: '자유 놀이 및 휴식', description: '아이가 좋아하는 활동으로 하루를 즐겁게 마무리해요.', category: '놀이', icon: '🎉', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '내일 준비물 챙기기', description: '내일 필요한 물건들을 미리 챙겨요.', category: '기본생활', icon: '🎒', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
                 ],
                 '화': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
-                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 5:00', activity: '집 도착, 간식 및 휴식', description: '학교 다녀온 후 충분히 쉬는 시간을 가져요.', category: '휴식', icon: '🏠', completed: false },
-                    { time: '오후 5:30', activity: '음악 감상 및 리듬 놀이', description: '다양한 음악을 듣고 리듬을 느껴봐요.', category: '놀이', icon: '🎶', completed: false },
-                    { time: '오후 6:00', activity: '개별 학습: 수학', description: '숫자와 도형을 재미있게 배워요.', category: '학습', icon: '📚', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁을 먹으며 도란도란 이야기해요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업에 참여하며 새로운 것을 배워요.', category: '외부수업', icon: '🏫', completed: false },
-                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '🎉', completed: false },
-                    { time: '오후 9:00', activity: '내일 학습 준비물 확인', description: '내일 필요한 학습 도구를 확인해요.', category: '기본생활', icon: '📝', completed: false },
-                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
+                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '집 도착, 간식 및 휴식', description: '학교 다녀온 후 충분히 쉬는 시간을 가져요.', category: '휴식', icon: '🏠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:30', activity: '음악 감상 및 리듬 놀이', description: '다양한 음악을 듣고 리듬을 느껴봐요.', category: '놀이', icon: '🎶', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '개별 학습: 수학', description: '숫자와 도형을 재미있게 배워요.', category: '학습', icon: '📚', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁을 먹으며 도란도란 이야기해요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업에 참여하며 새로운 것을 배워요.', category: '외부수업', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '🎉', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '내일 학습 준비물 확인', description: '내일 필요한 학습 도구를 확인해요.', category: '기본생활', icon: '📝', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
                 ],
                 '수': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
-                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 4:30', activity: '통합 감각 치료 (외부)', description: '치료를 통해 다양한 감각을 경험하고 발달시켜요.', category: '치료', icon: '🧠', completed: false },
-                    { time: '오후 5:30', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false },
-                    { time: '오후 6:00', activity: '개별 학습: 영어 단어', description: '재미있는 그림과 함께 영어 단어를 익혀요.', category: '학습', icon: '📚', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '에너지를 보충하는 즐거운 저녁 시간이에요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 7:30', activity: '가족과 함께 보드게임', description: '보드게임을 하며 가족과 즐거운 시간을 보내요.', category: '놀이', icon: '🎲', completed: false },
-                    { time: '오후 8:10', activity: '함께 책 읽기 또는 가벼운 놀이', description: '차분한 활동으로 하루를 정리해요.', category: '독서', icon: '📖', completed: false },
-                    { time: '오후 9:00', activity: '개인 위생 관리', description: '양치, 세수 등 스스로 위생을 관리해요.', category: '기본생활', icon: '🪥', completed: false },
-                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
+                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 4:30', activity: '통합 감각 치료 (외부)', description: '치료를 통해 다양한 감각을 경험하고 발달시켜요.', category: '치료', icon: '🧠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:30', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '개별 학습: 영어 단어', description: '재미있는 그림과 함께 영어 단어를 익혀요.', category: '학습', icon: '📚', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '에너지를 보충하는 즐거운 저녁 시간이에요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '가족과 함께 보드게임', description: '보드게임을 하며 가족과 즐거운 시간을 보내요.', category: '놀이', icon: '🎲', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:10', activity: '함께 책 읽기 또는 가벼운 놀이', description: '차분한 활동으로 하루를 정리해요.', category: '독서', icon: '📖', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '개인 위생 관리', description: '양치, 세수 등 스스로 위생을 관리해요.', category: '기본생활', icon: '🪥', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
                 ],
                 '목': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
-                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 4:00', activity: '인지 치료 (외부)', description: '생각하는 힘을 기르는 즐거운 치료 시간이에요.', category: '치료', icon: '🧠', completed: false },
-                    { time: '오후 5:00', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false },
-                    { time: '오후 5:30', activity: '미술 활동', description: '크레용, 물감으로 자유롭게 표현해요.', category: '놀이', icon: '🎨', completed: false },
-                    { time: '오후 6:00', activity: '개별 학습: 과학 탐구', description: '간단한 과학 실험으로 호기심을 키워요.', category: '학습', icon: '🔬', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁으로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업을 통해 즐겁게 배워요.', category: '외부수업', icon: '🏫', completed: false },
-                    { time: '오후 8:30', activity: '자유 놀이 시간', description: '아이가 원하는 놀이를 하며 마음껏 상상력을 펼쳐요.', category: '놀이', icon: '🎉', completed: false },
-                    { time: '오후 9:00', activity: '옷 정리하기', description: '벗은 옷을 스스로 정리하는 연습을 해요.', category: '기본생활', icon: '👕', completed: false },
-                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
+                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 4:00', activity: '인지 치료 (외부)', description: '생각하는 힘을 기르는 즐거운 치료 시간이에요.', category: '치료', icon: '🧠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '집 도착 및 휴식', description: '치료 후 집에 와서 편안하게 쉬어요.', category: '휴식', icon: '🏠', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:30', activity: '미술 활동', description: '크레용, 물감으로 자유롭게 표현해요.', category: '놀이', icon: '🎨', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '개별 학습: 과학 탐구', description: '간단한 과학 실험으로 호기심을 키워요.', category: '학습', icon: '🔬', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁으로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업을 통해 즐겁게 배워요.', category: '외부수업', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:30', activity: '자유 놀이 시간', description: '아이가 원하는 놀이를 하며 마음껏 상상력을 펼쳐요.', category: '놀이', icon: '🎉', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '옷 정리하기', description: '벗은 옷을 스스로 정리하는 연습을 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
                 ],
                 '금': [
-                    // New morning schedules
-                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true },
-                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true },
-                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false },
-                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false },
-                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 5:00', activity: '사회성 수업 (외부)', description: '친구들과 어울리는 방법을 배우는 시간이에요.', category: '치료', icon: '🧑‍🤝‍�', completed: false },
-                    { time: '오후 6:00', activity: '키즈카페에서 신나게 놀기', description: '에너지를 발산하며 즐거운 시간을 보내요.', category: '놀이', icon: '🤸', completed: false },
-                    { time: '오후 7:00', activity: '간식 및 자유시간', description: '신나게 놀고 와서 간단한 간식을 먹어요.', category: '휴식', icon: '🍎', completed: false },
-                    { time: '오후 7:30', activity: '집 도착 및 저녁 식사', description: '신나게 놀고 와서 먹는 저녁은 꿀맛이에요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 8:30', activity: '함께 책 읽기 또는 가벼운 활동', description: '흥분된 마음을 가라앉히고 차분하게 하루를 마무리해요.', category: '독서', icon: '📖', completed: false },
-                    { time: '오후 9:00', activity: '주말 계획 이야기하기', description: '주말에 무엇을 할지 함께 이야기 나눠요.', category: '놀이', icon: '🗓️', completed: false },
-                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
+                    { time: '오전 7:40', activity: '기상 및 아침 준비 시작', description: '잠에서 깨어나 활기찬 하루를 시작해요.', category: '기본생활', icon: '☀️', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:15', activity: '학교 갈 준비 (옷 입기, 세수, 양치)', description: '스스로 옷을 입고 학교 갈 준비를 해요.', category: '기본생활', icon: '👕', completed: false, persistentAlert: true, notified_5min: false, notified_start: false },
+                    { time: '오전 8:45', activity: '아침 식사', description: '영양 가득한 아침 식사로 에너지를 채워요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:15', activity: '등교', description: '학교로 즐겁게 출발해요.', category: '기본생활', icon: '🏫', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:00', activity: '점심 식사 (학교)', description: '학교에서 친구들과 맛있는 점심을 먹어요.', category: '기본생활', icon: '🍱', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '하교 및 간식', description: '학교에서 돌아와 간식을 먹고 휴식해요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '사회성 수업 (외부)', description: '친구들과 어울리는 방법을 배우는 시간이에요.', category: '치료', icon: '🧑‍🤝‍🧑', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '키즈카페에서 신나게 놀기', description: '에너지를 발산하며 즐거운 시간을 보내요.', category: '놀이', icon: '🤸', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:00', activity: '간식 및 자유시간', description: '신나게 놀고 와서 간단한 간식을 먹어요.', category: '휴식', icon: '🍎', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '집 도착 및 저녁 식사', description: '신나게 놀고 와서 먹는 저녁은 꿀맛이에요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:30', activity: '함께 책 읽기 또는 가벼운 활동', description: '흥분된 마음을 가라앉히고 차분하게 하루를 마무리해요.', category: '독서', icon: '📖', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '주말 계획 이야기하기', description: '주말에 무엇을 할지 함께 이야기 나눠요.', category: '놀이', icon: '🗓️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
                 ],
                 '토': [
-                    { time: '오전 9:00', activity: '기상 및 아침 식사', description: '주말 아침, 상쾌하게 시작해요!', category: '기본생활', icon: '☀️', completed: false },
-                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 복습해요.', category: '학습', icon: '📚', completed: false },
-                    { time: '오전 10:40', activity: '함께 책 읽기', description: '아이가 좋아하는 책을 함께 읽으며 상상력을 키워요.', category: '독서', icon: '📖', completed: false },
-                    { time: '오전 11:30', activity: '자유 놀이 또는 야외 활동', description: '아이가 좋아하는 놀이를 하거나, 가까운 공원에서 신체 활동을 즐겨요.', category: '놀이', icon: '🪁', completed: false },
-                    { time: '오후 12:30', activity: '점심 식사', description: '맛있는 점심을 먹고 에너지를 충전해요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 2:00', activity: '부모님과 특별 활동/치료 훈련', description: '아이에게 필요한 맞춤형 훈련(소근육, 인지, 언어 등)을 놀이처럼 진행하거나, 함께 특별한 활동을 해요.', category: '치료', icon: '🧩', completed: false },
-                    { time: '오후 3:00', activity: '자유 놀이 및 간식', description: '활동 후 자유롭게 놀며 간식을 먹어요.', category: '놀이', icon: '🍦', completed: false },
-                    { time: '오후 4:00', activity: '집 안 정리 돕기', description: '장난감이나 책을 정리하며 청결 습관을 길러요.', category: '기본생활', icon: '🧹', completed: false },
-                    { time: '오후 5:00', activity: '가족과 함께하는 시간', description: '보드게임, 영화 보기, 대화 등 가족과 즐거운 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👧‍👦', completed: false },
-                    { time: '오후 6:00', activity: '하루 일과 돌아보기', description: '오늘 무엇을 했는지 이야기 나누며 하루를 마무리해요.', category: '독서', icon: '💬', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '주말 저녁은 특별한 메뉴로 즐겁게!', category: '기본생활', icon: '🍜', completed: false },
-                    { time: '오후 7:30', activity: '내일 주간 스케줄 미리 보기', description: '다음 주 스케줄을 미리 보며 새로운 한 주를 준비해요.', category: '학습', icon: '📅', completed: false },
-                    { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '하루를 마무리하며 편안하게 쉬고 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false }
+                    { time: '오전 9:00', activity: '기상 및 아침 식사', description: '주말 아침, 상쾌하게 시작해요!', category: '기본생활', icon: '☀️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 10:00', activity: '짧은 1:1 학습 (30-40분)', description: '주중에 부족했던 부분을 재미있는 놀이처럼 복습해요.', category: '학습', icon: '📚', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 10:40', activity: '함께 책 읽기', description: '아이가 좋아하는 책을 함께 읽으며 상상력을 키워요.', category: '독서', icon: '📖', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 11:30', activity: '자유 놀이 또는 야외 활동', description: '아이가 좋아하는 놀이를 하거나, 가까운 공원에서 신체 활동을 즐겨요.', category: '놀이', icon: '�', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:30', activity: '점심 식사', description: '맛있는 점심을 먹고 에너지를 충전해요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 2:00', activity: '부모님과 특별 활동/치료 훈련', description: '아이에게 필요한 맞춤형 훈련(소근육, 인지, 언어 등)을 놀이처럼 진행하거나, 함께 특별한 활동을 해요.', category: '치료', icon: '🧩', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '자유 놀이 및 간식', description: '활동 후 자유롭게 놀며 간식을 먹어요.', category: '놀이', icon: '🍦', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 4:00', activity: '집 안 정리 돕기', description: '장난감이나 책을 정리하며 청결 습관을 길러요.', category: '기본생활', icon: '🧹', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '가족과 함께하는 시간', description: '보드게임, 영화 보기, 대화 등 가족과 즐거운 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👧‍👦', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '하루 일과 돌아보기', description: '오늘 무엇을 했는지 이야기 나누며 하루를 마무리해요.', category: '독서', icon: '💬', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '주말 저녁은 특별한 메뉴로 즐겁게!', category: '기본생활', icon: '🍜', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '내일 주간 스케줄 미리 보기', description: '다음 주 스케줄을 미리 보며 새로운 한 주를 준비해요.', category: '학습', icon: '📅', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '하루를 마무리하며 편안하게 쉬고 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false }
                 ],
                 '일': [
-                    { time: '오전 9:00', activity: '늦잠 및 자유 기상', description: '주말 아침은 좀 더 여유롭게 즐겨요!', category: '휴식', icon: '🛌', completed: false },
-                    { time: '오전 9:45', activity: '아침 식사 및 준비', description: '간단하고 맛있는 아침 식사를 해요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오전 10:30', activity: '가벼운 신체 활동', description: '산책이나 실내 스트레칭으로 몸을 움직여요.', category: '놀이', icon: '🏃', completed: false },
-                    { time: '오전 11:30', activity: '자유 놀이 시간', description: '아이가 원하는 놀이를 자유롭게 선택해요.', category: '놀이', icon: '🧩', completed: false },
-                    { time: '오후 12:30', activity: '점심 식사', description: '온 가족이 함께 즐거운 점심 식사 시간이에요.', category: '기본생활', icon: '🍽️', completed: false },
-                    { time: '오후 2:00', activity: '주간 활동 복습', description: '이번 주에 배운 것들을 가볍게 복습하거나, 그림으로 표현해요.', category: '학습', icon: '📝', completed: false },
-                    { time: '오후 3:00', activity: '미술 또는 창작 활동', description: '다양한 재료로 창의력을 표현하는 시간이에요.', category: '놀이', icon: '🎨', completed: false },
-                    { time: '오후 4:00', activity: '자유 놀이 및 간식', description: '자유롭게 놀고 맛있는 간식을 먹어요.', category: '놀이', icon: '🍪', completed: false },
-                    { time: '오후 5:00', activity: '가족과 함께하는 특별 시간', description: '영화 시청, 공원 나들이 등 가족과 특별한 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👩‍👧‍👦', completed: false },
-                    { time: '오후 6:00', activity: '다음 주 계획 이야기하기', description: '다음 주 스케줄에 대해 이야기 나누고 기대감을 가져요.', category: '학습', icon: '🗓️', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '한 주를 마무리하는 저녁 식사를 해요.', category: '기본생활', icon: '🍜', completed: false },
-                    { time: '오후 7:30', activity: '목욕 및 개인 위생', description: '개운하게 목욕하고 몸을 깨끗하게 해요.', category: '기본생활', icon: '🛁', completed: false },
-                    { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '편안하게 쉬면서 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
-                    { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false }
+                    { time: '오전 9:00', activity: '늦잠 및 자유 기상', description: '주말 아침은 좀 더 여유롭게 즐겨요!', category: '휴식', icon: '🛌', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 9:45', activity: '아침 식사 및 준비', description: '간단하고 맛있는 아침 식사를 해요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 10:30', activity: '가벼운 신체 활동', description: '산책이나 실내 스트레칭으로 몸을 움직여요.', category: '놀이', icon: '🏃', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오전 11:30', activity: '자유 놀이 시간', description: '아이가 원하는 놀이를 자유롭게 선택해요.', category: '놀이', icon: '🧩', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 12:30', activity: '점심 식사', description: '온 가족이 함께 즐거운 점심 식사 시간이에요.', category: '기본생활', icon: '🍽️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 2:00', activity: '주간 활동 복습', description: '이번 주에 배운 것들을 가볍게 복습하거나, 그림으로 표현해요.', category: '학습', icon: '📝', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 3:00', activity: '미술 또는 창작 활동', description: '다양한 재료로 창의력을 표현하는 시간이에요.', category: '놀이', icon: '🎨', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 4:00', activity: '자유 놀이 및 간식', description: '자유롭게 놀고 맛있는 간식을 먹어요.', category: '놀이', icon: '🍪', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 5:00', activity: '가족과 함께하는 특별 시간', description: '영화 시청, 공원 나들이 등 가족과 특별한 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👩‍👧‍👦', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:00', activity: '다음 주 계획 이야기하기', description: '다음 주 스케줄에 대해 이야기 나누고 기대감을 가져요.', category: '학습', icon: '🗓️', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '한 주를 마무리하는 저녁 식사를 해요.', category: '기본생활', icon: '🍜', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 7:30', activity: '목욕 및 개인 위생', description: '개운하게 목욕하고 몸을 깨끗하게 해요.', category: '기본생활', icon: '🛁', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '편안하게 쉬면서 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false, persistentAlert: false, notified_5min: false, notified_start: false },
+                    { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false, persistentAlert: false, notified_5min: false, notified_start: false }
                 ]
             };
             
@@ -332,53 +328,63 @@
                 if (savedData) {
                     try {
                         const parsedData = JSON.parse(savedData);
-                        // Make sure the loaded data structure is compatible with new '토', '일' days
-                        if (parsedData['주말'] && !parsedData['토'] && !parsedData['일']) {
-                            // Simple migration: distribute '주말' items to '토' and '일' evenly
+                        
+                        // Handle migration from old '주말' key if it exists and '토', '일' don't
+                        if (parsedData['주말'] && (!parsedData['토'] || !parsedData['일'])) {
                             const weekendItems = parsedData['주말'];
                             const saturdayItems = [];
                             const sundayItems = [];
-                            for(let i = 0; i < weekendItems.length; i++) {
-                                if (i % 2 === 0) { // Distribute evenly
+                            // Simple distribution: attempts to split evenly. This might need manual adjustment.
+                            for (let i = 0; i < weekendItems.length; i++) {
+                                if (i % 2 === 0) {
                                     saturdayItems.push(weekendItems[i]);
                                 } else {
                                     sundayItems.push(weekendItems[i]);
                                 }
                             }
-                            scheduleData['토'] = saturdayItems;
-                            scheduleData['일'] = sundayItems;
-                            delete parsedData['주말']; // Remove old '주말' entry
-
-                            // Re-save to ensure the new structure is in local storage for next load
-                            localStorage.setItem('childScheduleData', JSON.stringify(scheduleData));
+                            parsedData['토'] = saturdayItems;
+                            parsedData['일'] = sundayItems;
+                            delete parsedData['주말'];
                             console.warn("로컬 스토리지의 '주말' 스케줄 데이터가 '토'와 '일'로 마이그레이션되었습니다.");
-                        } else {
-                            // If '토' or '일' already exist, assume data is already migrated or new.
-                            // Simply assign parsedData to scheduleData for updates.
-                            // Ensure persistentAlert property is preserved/added
-                            Object.keys(scheduleData).forEach(day => {
-                                if (parsedData[day]) {
-                                    scheduleData[day].forEach((item, index) => {
-                                        // Merge properties from parsedData, but prioritize script-defined persistentAlert
-                                        if (parsedData[day][index]) {
-                                            Object.assign(item, parsedData[day][index]);
-                                        }
-                                        // Ensure persistentAlert is true for specific morning activities, overriding saved state if necessary
-                                        if (item.time === '오전 7:40' || item.time === '오전 8:15') {
-                                            item.persistentAlert = true;
-                                        }
-                                    });
-                                }
-                            });
                         }
-                        
+
+                        // Iterate over the *default* scheduleData to apply saved 'completed' and notification states
+                        // This ensures new activities in the default data are always present.
+                        Object.keys(scheduleData).forEach(day => {
+                            if (parsedData[day] && Array.isArray(parsedData[day])) {
+                                scheduleData[day].forEach((defaultItem, index) => {
+                                    const savedItem = parsedData[day][index];
+                                    if (savedItem) {
+                                        defaultItem.completed = savedItem.completed || false;
+                                        // Load notification flags from saved data
+                                        defaultItem.notified_5min = savedItem.notified_5min || false;
+                                        defaultItem.notified_start = savedItem.notified_start || false;
+                                        // Restore persistentAlert from default, as it's a fixed property for certain activities
+                                        if (defaultItem.time === '오전 7:40' || defaultItem.time === '오전 8:15') {
+                                            defaultItem.persistentAlert = true;
+                                        } else {
+                                            defaultItem.persistentAlert = false; // Ensure non-persistent by default for others
+                                        }
+                                    } else {
+                                        // If no saved item for this index (e.g., new activity added), reset flags to default
+                                        defaultItem.completed = false;
+                                        defaultItem.notified_5min = false;
+                                        defaultItem.notified_start = false;
+                                        // Set persistentAlert for new morning activities
+                                        if (defaultItem.time === '오전 7:40' || defaultItem.time === '오전 8:15') {
+                                            defaultItem.persistentAlert = true;
+                                        } else {
+                                            defaultItem.persistentAlert = false;
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     } catch (e) {
-                        console.error('Local storage 데이터 파싱 오류:', e); 
-                        // Fallback to default scheduleData if parsing fails
-                        scheduleData = { /* default data will be used from the script directly */ };
+                        console.error('Local storage 데이터 파싱 오류:', e);
                         console.warn('로컬 스토리지 데이터 파싱 실패, 기본 스케줄 데이터를 사용합니다.');
                     }
-                } 
+                }
             }
 
             // 로컬 스토리지에 스케줄 데이터를 저장
@@ -408,22 +414,25 @@
 
             const scheduleContent = document.getElementById('schedule-content'); // Left panel schedule content area
             const exploreScheduleContent = document.getElementById('schedule-content-explore'); // Right panel explore schedule content area
-            // const dayTabsContainer = document.getElementById('day-tabs'); // '오늘의 일정' 요일 탭 제거됨
             const exploreDayTabsContainer = document.getElementById('explore-day-tabs'); // Right panel explore day tabs container
 
             const weeklyAnalysisTab = document.getElementById('weekly-analysis-tab');
             const dailyAnalysisTab = document.getElementById('daily-analysis-tab');
             const weeklyAnalysisContent = document.getElementById('weekly-analysis-content');
             const dailyAnalysisContent = document.getElementById('daily-analysis-content');
-            const currentDayDisplay = document.getElementById('current-day-display');
-            const currentTimeDisplay = document.getElementById('current-time-display');
+            const currentDayDisplay = document.getElementById('current-day-display'); // Right panel full date/day
+            const currentTimeDisplay = document.getElementById('current-time-display'); // Right panel time
+            const todayActualDayDisplay = document.getElementById('today-day-display-actual'); // Left panel just day of week
 
 
             let weeklyActivityChart = null; // 주간 활동 분석 차트
             let dailyActivityChart = null; // 일간 활동 분석 차트
-            let currentActiveDay = '월'; // Default active day for left panel (today's schedule)
+            let currentActiveDay = '월'; // Stores current day for '오늘의 일정' (based on system date)
             let currentExploredDay = '월'; // Default explored day for right panel's schedule exploration and daily analysis
-            let lastAnnouncedActivity = null; // 마지막으로 음성 안내된 활동
+
+            let lastSpokenText = ''; // For global speech cooldown
+            let lastSpokenTime = 0;
+            const SPEAK_COOLDOWN = 5 * 1000; // 5 seconds cooldown between general announcements
 
             // Fireworks Canvas setup
             const fireworksCanvas = document.getElementById('fireworksCanvas');
@@ -533,15 +542,21 @@
             }
 
             function speak(text) {
-                if ('speechSynthesis' in window) {
-                    if (window.speechSynthesis.speaking) {
-                        window.speechSynthesis.cancel();
+                const now = Date.now();
+                if (text !== lastSpokenText || (now - lastSpokenTime > SPEAK_COOLDOWN)) {
+                    if ('speechSynthesis' in window) {
+                        if (window.speechSynthesis.speaking) {
+                            window.speechSynthesis.cancel();
+                        }
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.lang = 'ko-KR';
+                        utterance.rate = 1.1; // Restore desired rate
+                        window.speechSynthesis.speak(utterance);
+                        lastSpokenText = text;
+                        lastSpokenTime = now;
+                    } else {
+                        console.warn('Text-to-speech not supported in this browser.');
                     }
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.lang = 'ko-KR';
-                    window.speechSynthesis.speak(utterance);
-                } else {
-                    console.warn('Text-to-speech not supported in this browser.');
                 }
             }
 
@@ -556,33 +571,85 @@
                 return { hours, minutes, seconds: 0 }; // Ensure seconds are 0 for consistent comparison
             }
 
+            // Checks for 5-min before and start-time notifications
+            function checkNotifications() {
+                const now = new Date();
+                const currentSchedule = scheduleData[currentActiveDay];
+                if (!currentSchedule) return;
+
+                currentSchedule.forEach(item => {
+                    if (item.completed) {
+                        // For completed items, ensure notification flags are reset (especially for persistent ones)
+                        item.notified_5min = false;
+                        item.notified_start = false;
+                        return; 
+                    }
+
+                    const itemStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseTime(item.time).hours, parseTime(item.time).minutes, 0);
+                    const fiveMinutesBefore = new Date(itemStartTime.getTime() - 5 * 60 * 1000);
+
+                    // 5분 전 알림
+                    if (!item.notified_5min && now >= fiveMinutesBefore && now < itemStartTime) {
+                        speak(`잠시 후, ${item.activity} 시간이에요.`);
+                        item.notified_5min = true;
+                        saveScheduleState(); 
+                    }
+
+                    // 시작 시간 알림
+                    const isTimeForStartAlert = now >= itemStartTime && now < new Date(itemStartTime.getTime() + 60 * 1000); // 1-minute window
+                    
+                    if (isTimeForStartAlert) {
+                        if (item.persistentAlert) {
+                            // For persistent alerts, speak repeatedly within the 1-minute window if not completed
+                            speak(`${item.activity} 시작할 시간입니다!`);
+                            // Do NOT set notified_start to true for persistent alerts, so it can repeat.
+                            // The `speak` function's internal cooldown handles rapid-fire repetition.
+                        } else {
+                            // For non-persistent alerts, speak only once.
+                            if (!item.notified_start) {
+                                speak(`${item.activity} 시작할 시간입니다!`);
+                                item.notified_start = true;
+                                saveScheduleState(); 
+                            }
+                        }
+                    } else if (now > itemStartTime && !item.completed) { // If past start time and not completed
+                        // For non-persistent alerts, if we missed the window, mark it as notified_start to prevent future alerts for this specific item
+                        if (!item.persistentAlert && !item.notified_start) {
+                            item.notified_start = true;
+                            saveScheduleState();
+                        }
+                    }
+                });
+            }
+
+
+            // Updates highlighting and scrolls to current activity
             function updateCurrentActivityHighlight() {
                 const now = new Date();
                 const currentSystemDayIndex = now.getDay();
                 const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
                 let systemDeterminedDay = daysOfWeek[currentSystemDayIndex];
 
-                // Update current date/time display
+                // Update current date/time display (right panel)
                 const today = new Date();
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 currentDayDisplay.textContent = today.toLocaleDateString('ko-KR', options);
                 currentTimeDisplay.textContent = today.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+                
+                // Update '오늘의 일정' actual day display (left panel)
+                todayActualDayDisplay.textContent = `${systemDeterminedDay}요일`;
 
 
                 // Automatically set currentActiveDay based on system time
-                currentActiveDay = systemDeterminedDay;
-                // Render schedule for the current day only if it's not already rendered or if the day has changed
-                // This prevents re-rendering and resetting scroll position every 10 seconds.
-                const currentDayOnScreen = scheduleContent.dataset.currentDay;
-                if (!currentDayOnScreen || currentDayOnScreen !== currentActiveDay) {
-                    renderSchedule(currentActiveDay); // Render if day changed or not initialized
+                // If the day has changed, re-render the schedule and update the dataset attribute
+                if (currentActiveDay !== systemDeterminedDay || !scheduleContent.dataset.currentDay) {
+                    currentActiveDay = systemDeterminedDay;
+                    renderSchedule(currentActiveDay); 
                     scheduleContent.dataset.currentDay = currentActiveDay; // Store currently rendered day
                 }
                 
-
                 const currentSchedule = scheduleData[currentActiveDay];
                 if (!currentSchedule) {
-                     lastAnnouncedActivity = null;
                      return;
                 }
 
@@ -593,77 +660,75 @@
 
                 let foundCurrent = false;
                 let currentActivityElementToScroll = null;
+                let activeActivityIndex = -1; // To track the actual activity to highlight
 
+                // Find the current activity based on time
                 for (let i = 0; i < currentSchedule.length; i++) {
                     const item = currentSchedule[i];
-                    
-                    let startTimeHours, startTimeMinutes;
-                    if (item.time.includes('오전') || item.time.includes('오후')) {
-                        const parsed = parseTime(item.time);
-                        startTimeHours = parsed.hours;
-                        startTimeMinutes = parsed.minutes;
-                    } else {
-                        continue; 
-                    }
+                    const parsedTime = parseTime(item.time);
+                    const itemStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parsedTime.hours, parsedTime.minutes, 0);
 
-                    const startDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), startTimeHours, startTimeMinutes, 0); 
-
-                    let endDateTime;
+                    let nextItemTime = null;
                     if (i + 1 < currentSchedule.length) {
-                        const nextItem = currentSchedule[i+1];
-                        if (nextItem.time.includes('오전') || nextItem.time.includes('오후')) {
-                            const nextStartTime = parseTime(nextItem.time);
-                            endDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextStartTime.hours, nextStartTime.minutes, 0); 
-                        } else {
-                            endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); 
-                        }
+                        const nextParsedTime = parseTime(currentSchedule[i+1].time);
+                        nextItemTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), nextParsedTime.hours, nextParsedTime.minutes, 0);
                     } else {
-                        const bedTime = parseTime('오후 10:00'); 
-                        const bedDateTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), bedTime.hours, bedTime.minutes, 0);
-                        endDateTime = new Date(startDateTime.getTime() + 60 * 60 * 1000); 
-                        if (endDateTime.getTime() > bedDateTime.getTime()) { 
-                             endDateTime = bedDateTime;
+                        // Last item, assume it lasts until end of "active day" (e.g., 10 PM) or at least 1 hour.
+                        // This logic needs to be robust for end-of-day.
+                        const bedTime = parseTime('오후 10:00'); // Assuming 10 PM is end of day activities
+                        nextItemTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), bedTime.hours, bedTime.minutes, 0);
+                        if (itemStartTime.getTime() + (60 * 60 * 1000) > nextItemTime.getTime()) { // Ensure at least 1 hour duration or until bedtime
+                            nextItemTime = new Date(itemStartTime.getTime() + (60 * 60 * 1000));
                         }
                     }
-                    
-                    if (now >= startDateTime && now < endDateTime) {
-                        const scheduleElements = document.querySelectorAll('#schedule-content .timeline-item');
-                        const currentActivityElement = Array.from(scheduleElements).find(el => parseInt(el.dataset.index) === i);
 
-                        if (currentActivityElement) {
-                            currentActivityElement.classList.add('current-activity');
-                            currentActivityElementToScroll = currentActivityElement; 
-                            
-                            const isPersistentAlertActivity = (item.persistentAlert && !item.completed); 
-
-                            if (isPersistentAlertActivity) {
-                                speak(`${item.activity} 시작할 시간이에요.`);
-                            } else if (lastAnnouncedActivity !== item.activity) {
-                                if (!item.completed) {
-                                    speak(`${item.activity} 시작할 시간이에요.`);
-                                    lastAnnouncedActivity = item.activity;
-                                }
-                            }
-                            foundCurrent = true;
-                        }
-                        break; 
+                    if (now >= itemStartTime && now < nextItemTime) {
+                        activeActivityIndex = i;
+                        foundCurrent = true;
+                        break;
                     }
                 }
 
-                // Scroll only if a new current activity is found and it's not already in view (or mostly in view)
-                if (foundCurrent && currentActivityElementToScroll) {
+                // If no activity is found within a time slot (e.g., between last activity and midnight),
+                // highlight the *next* upcoming activity if any, or the last activity if past all.
+                if (!foundCurrent && currentSchedule.length > 0) {
+                    // Find the next upcoming activity
+                    for (let i = 0; i < currentSchedule.length; i++) {
+                        const itemStartTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), parseTime(currentSchedule[i].time).hours, parseTime(currentSchedule[i].time).minutes, 0);
+                        if (now < itemStartTime) {
+                            activeActivityIndex = i; // Next upcoming activity
+                            break;
+                        }
+                    }
+                    // If all activities are in the past, highlight the very last one
+                    if (activeActivityIndex === -1) {
+                        activeActivityIndex = currentSchedule.length - 1;
+                    }
+                }
+
+
+                if (activeActivityIndex !== -1) {
+                    const scheduleElements = document.querySelectorAll('#schedule-content .timeline-item');
+                    const currentActivityElement = Array.from(scheduleElements).find(el => parseInt(el.dataset.index) === activeActivityIndex);
+
+                    if (currentActivityElement) {
+                        currentActivityElement.classList.add('current-activity');
+                        currentActivityElementToScroll = currentActivityElement; 
+                    }
+                }
+                
+                // Scroll to the highlighted element
+                if (currentActivityElementToScroll) {
                     const rect = currentActivityElementToScroll.getBoundingClientRect();
                     const containerRect = scheduleContent.getBoundingClientRect();
 
-                    // Check if the element is not fully in view
+                    // Scroll if element is not fully visible or is near the edges of the scroll container
                     if (rect.top < containerRect.top || rect.bottom > containerRect.bottom || 
-                        rect.top < (containerRect.top + containerRect.height * 0.2) || // Check if near top
-                        rect.bottom > (containerRect.bottom - containerRect.height * 0.2)) { // Check if near bottom
+                        rect.top < (containerRect.top + containerRect.height * 0.1) || // Near top 10%
+                        rect.bottom > (containerRect.bottom - containerRect.height * 0.1)) { // Near bottom 10%
                         
                         currentActivityElementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
-                } else {
-                    lastAnnouncedActivity = null; 
                 }
             }
 
@@ -718,14 +783,17 @@
                                 itemDiv.firstElementChild.classList.remove('completed-activity');
                             }
                             renderWeeklyChart(); 
+                            // When a persistent alert is completed, ensure notification flags are reset.
                             if (item.persistentAlert) { 
-                                lastAnnouncedActivity = null; // Clear last announced for persistent alerts upon completion
-                                updateCurrentActivityHighlight(); // Re-evaluate immediately
+                                item.notified_5min = false;
+                                item.notified_start = false;
+                                saveScheduleState(); // Save state after resetting flags
                             }
                         });
                     }
                 });
-                // No immediate call to updateCurrentActivityHighlight() here, as setInterval handles it
+                // Initial highlight and scroll call after rendering
+                updateCurrentActivityHighlight(); 
             }
 
             let activeExploreDay = null; 
@@ -1027,14 +1095,13 @@
             loadScheduleState(); 
             setupAudio(); 
             renderTabs(); 
+            
             // Initial render of schedule for the current day
-            // This is crucial for initial display of current day's schedule without user interaction
             const initialDayIndex = new Date().getDay();
             const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
             currentActiveDay = daysOfWeek[initialDayIndex];
             renderSchedule(currentActiveDay); 
-            // Set the data-attribute for current day on initial render
-            scheduleContent.dataset.currentDay = currentActiveDay;
+            scheduleContent.dataset.currentDay = currentActiveDay; // Set the data-attribute for current day on initial render
 
             exploreScheduleContent.classList.add('hidden'); 
             renderWeeklyChart(); 
@@ -1056,8 +1123,9 @@
                 renderDailyChart(currentExploredDay || '월'); 
             });
             
-            // Set up interval for real-time highlighting, voice notification, and current time display
-            setInterval(updateCurrentActivityHighlight, 10 * 1000); // Check every 10 seconds
+            // Set up intervals for real-time updates and notifications
+            setInterval(updateCurrentActivityHighlight, 10 * 1000); // Highlight and scroll every 10 seconds
+            setInterval(checkNotifications, 1 * 60 * 1000); // Check notifications every 1 minute
         });
     </script>
 </body>
