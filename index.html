@@ -122,6 +122,7 @@
                 <div class="lg:col-span-2">
                     <section id="daily-schedule" class="bg-white p-6 rounded-2xl shadow-lg mb-8">
                         <h2 class="text-2xl font-bold mb-4 text-[#3B666B]">오늘의 일정</h2>
+                        <p id="today-day-display" class="text-xl font-semibold text-gray-700 mb-6"></p> <!-- Added for current day display -->
                         <p class="text-gray-600 mb-6">현재 시간을 기준으로 오늘 해야 할 활동을 확인하고, 완료 시 체크박스를 눌러주세요!</p>
                         <!-- '오늘의 일정' 요일 탭 제거됨 -->
                         <div id="schedule-content" class="space-y-6">
@@ -232,7 +233,7 @@
                     { time: '오후 6:00', activity: '개별 학습: 수학', description: '숫자와 도형을 재미있게 배워요.', category: '학습', icon: '📚', completed: false },
                     { time: '오후 6:30', activity: '저녁 식사', description: '맛있는 저녁을 먹으며 도란도란 이야기해요.', category: '기본생활', icon: '🍽️', completed: false },
                     { time: '오후 7:30', activity: '한글/수학 수업 (외부)', description: '외부 수업에 참여하며 새로운 것을 배워요.', category: '외부수업', icon: '🏫', completed: false },
-                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '🎉', completed: false },
+                    { time: '오후 8:30', activity: '수업 후 휴식 및 자유 놀이', description: '수업으로 지친 몸과 마음을 쉬게 해줘요.', category: '놀이', icon: '�', completed: false },
                     { time: '오후 9:00', activity: '내일 학습 준비물 확인', description: '내일 필요한 학습 도구를 확인해요.', category: '기본생활', icon: '📝', completed: false },
                     { time: '오후 9:30', activity: '취침 준비', description: '내일을 위해 차분하게 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                     { time: '오후 10:00', activity: '취침', description: '편안하게 잠자리에 들 시간이에요.', category: '기본생활', icon: '😴', completed: false },
@@ -318,7 +319,7 @@
                     { time: '오후 4:00', activity: '자유 놀이 및 간식', description: '자유롭게 놀고 맛있는 간식을 먹어요.', category: '놀이', icon: '🍪', completed: false },
                     { time: '오후 5:00', activity: '가족과 함께하는 특별 시간', description: '영화 시청, 공원 나들이 등 가족과 특별한 시간을 보내요.', category: '놀이', icon: '👨‍👩‍👩‍👧‍👦', completed: false },
                     { time: '오후 6:00', activity: '다음 주 계획 이야기하기', description: '다음 주 스케줄에 대해 이야기 나누고 기대감을 가져요.', category: '학습', icon: '🗓️', completed: false },
-                    { time: '오후 6:30', activity: '저녁 식사', description: '한 주를 마무리하는 저녁 식사를 해요.', category: '기본생활', icon: '�', completed: false },
+                    { time: '오후 6:30', activity: '저녁 식사', description: '한 주를 마무리하는 저녁 식사를 해요.', category: '기본생활', icon: '🍜', completed: false },
                     { time: '오후 7:30', activity: '목욕 및 개인 위생', description: '개운하게 목욕하고 몸을 깨끗하게 해요.', category: '기본생활', icon: '🛁', completed: false },
                     { time: '오후 8:00', activity: '휴식 및 취침 준비', description: '편안하게 쉬면서 잠자리에 들 준비를 해요.', category: '기본생활', icon: '씻기', completed: false },
                     { time: '오후 9:00', activity: '취침', description: '내일을 위해 일찍 잠자리에 들어요.', category: '기본생활', icon: '😴', completed: false }
@@ -354,23 +355,22 @@
                         } else {
                             // If '토' or '일' already exist, assume data is already migrated or new.
                             // Simply assign parsedData to scheduleData for updates.
-                            Object.assign(scheduleData, parsedData);
-                        }
-                        
-                        // Ensure 'persistentAlert' property exists for new morning activities if not loaded from saved data
-                        ['월', '화', '수', '목', '금'].forEach(day => {
-                            if (scheduleData[day]) {
-                                scheduleData[day].forEach(item => {
-                                    if (item.time === '오전 7:40' || item.time === '오전 8:15') {
-                                        if (item.persistentAlert === undefined) { // Only set if not already defined
+                            // Ensure persistentAlert property is preserved/added
+                            Object.keys(scheduleData).forEach(day => {
+                                if (parsedData[day]) {
+                                    scheduleData[day].forEach((item, index) => {
+                                        if (parsedData[day][index]) {
+                                            Object.assign(item, parsedData[day][index]);
+                                        }
+                                        // Ensure persistentAlert is true for specific morning activities
+                                        if (item.time === '오전 7:40' || item.time === '오전 8:15') {
                                             item.persistentAlert = true;
                                         }
-                                    }
-                                });
-                            }
-                        });
-
-
+                                    });
+                                }
+                            });
+                        }
+                        
                     } catch (e) {
                         console.error('Local storage 데이터 파싱 오류:', e); 
                         // Fallback to default scheduleData if parsing fails
@@ -570,14 +570,14 @@
 
                 // Automatically set currentActiveDay based on system time
                 currentActiveDay = systemDeterminedDay;
-                // Since day tabs for '오늘의 일정' are removed, we just need to ensure the correct schedule is rendered
-                // This call might be redundant if `renderSchedule` is called on DOMContentLoaded,
-                // but it ensures the active schedule stays in sync if the day changes while the app is open.
-                // However, `renderSchedule` is also called by initial load, so we only need to re-render if the *day itself* changes.
-                // The `renderTabs` function (which would implicitly call renderSchedule for the active tab) is no longer doing this for '오늘의 일정'
-                // So, let's explicitly call `renderSchedule` here to ensure it's always up-to-date with the current day.
-                renderSchedule(currentActiveDay);
-
+                // Render schedule for the current day only if it's not already rendered or if the day has changed
+                // This prevents re-rendering and resetting scroll position every 10 seconds.
+                const currentDayOnScreen = scheduleContent.dataset.currentDay;
+                if (!currentDayOnScreen || currentDayOnScreen !== currentActiveDay) {
+                    renderSchedule(currentActiveDay); // Render if day changed or not initialized
+                    scheduleContent.dataset.currentDay = currentActiveDay; // Store currently rendered day
+                }
+                
 
                 const currentSchedule = scheduleData[currentActiveDay];
                 if (!currentSchedule) {
@@ -585,6 +585,7 @@
                      return;
                 }
 
+                // Remove highlight from all items first
                 document.querySelectorAll('#schedule-content .timeline-item').forEach(item => {
                     item.classList.remove('current-activity');
                 });
@@ -601,7 +602,6 @@
                         startTimeHours = parsed.hours;
                         startTimeMinutes = parsed.minutes;
                     } else {
-                        // Skip if no specific time, as time-based highlighting needs time
                         continue; 
                     }
 
@@ -633,14 +633,11 @@
                             currentActivityElement.classList.add('current-activity');
                             currentActivityElementToScroll = currentActivityElement; 
                             
-                            const isPersistentAlertActivity = (item.persistentAlert && !item.completed); // Check if it's a persistent alert AND not completed
+                            const isPersistentAlertActivity = (item.persistentAlert && !item.completed); 
 
                             if (isPersistentAlertActivity) {
-                                // Persistent alert: always speak if not completed
                                 speak(`${item.activity} 시작할 시간이에요.`);
-                                // Do not update lastAnnouncedActivity for persistent alerts to ensure it keeps repeating
                             } else if (lastAnnouncedActivity !== item.activity) {
-                                // One-time alert: speak only if new activity and not completed
                                 if (!item.completed) {
                                     speak(`${item.activity} 시작할 시간이에요.`);
                                     lastAnnouncedActivity = item.activity;
@@ -648,14 +645,22 @@
                             }
                             foundCurrent = true;
                         }
-                        // Break if current activity found, as we only highlight one.
-                        // The repetition for persistent alerts is handled by not updating lastAnnouncedActivity for those specific items.
                         break; 
                     }
                 }
 
+                // Scroll only if a new current activity is found and it's not already in view (or mostly in view)
                 if (foundCurrent && currentActivityElementToScroll) {
-                    currentActivityElementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const rect = currentActivityElementToScroll.getBoundingClientRect();
+                    const containerRect = scheduleContent.getBoundingClientRect();
+
+                    // Check if the element is not fully in view
+                    if (rect.top < containerRect.top || rect.bottom > containerRect.bottom || 
+                        rect.top < (containerRect.top + containerRect.height * 0.2) || // Check if near top
+                        rect.bottom > (containerRect.bottom - containerRect.height * 0.2)) { // Check if near bottom
+                        
+                        currentActivityElementToScroll.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
                 } else {
                     lastAnnouncedActivity = null; 
                 }
@@ -712,15 +717,14 @@
                                 itemDiv.firstElementChild.classList.remove('completed-activity');
                             }
                             renderWeeklyChart(); 
-                            // If a persistent alert activity is completed, clear lastAnnouncedActivity for immediate re-evaluation
                             if (item.persistentAlert) { 
                                 lastAnnouncedActivity = null;
-                                updateCurrentActivityHighlight(); // Re-evaluate immediately
+                                updateCurrentActivityHighlight(); 
                             }
                         });
                     }
                 });
-                updateCurrentActivityHighlight(); 
+                // updateCurrentActivityHighlight() is called by the interval, no need to call immediately after renderSchedule
             }
 
             let activeExploreDay = null; 
@@ -746,14 +750,7 @@
             }
 
             function renderTabs() {
-                const days = Object.keys(scheduleData);
-                // `dayTabsContainer`는 이제 사용하지 않으므로 제거합니다.
-                // if (!dayTabsContainer) {
-                //     console.error("오류: ID 'day-tabs'를 가진 요소를 찾을 수 없습니다!"); 
-                //     return; 
-                // }
-                // dayTabsContainer.innerHTML = '';
-                // (자동 요일 선택으로 변경되어 이 부분의 요일 탭 렌더링 로직 제거)
+                // '오늘의 일정' 요일 탭은 이제 시스템 시간에 따라 자동으로 결정되므로 이 함수에서 렌더링하지 않습니다.
 
                 if (!exploreDayTabsContainer) {
                     console.error("오류: ID 'explore-day-tabs'를 가진 요소를 찾을 수 없습니다!"); 
@@ -763,11 +760,9 @@
                 // Render explore tabs in a specific order: 월, 화, 수, 목, 금, 토, 일
                 const orderedDays = ['월', '화', '수', '목', '금', '토', '일'];
                 orderedDays.forEach(day => {
-                     // Only render tab if the day exists in scheduleData
                     if (scheduleData[day]) {
                         const tabButton = document.createElement('button');
                         tabButton.textContent = day;
-                        // Initially set no active tab for explore, or '월' as default if desired for visual
                         tabButton.className = `px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 tab-inactive`; 
                         
                         tabButton.addEventListener('click', () => {
@@ -791,9 +786,7 @@
             }
             
             function getWeeklyActivityDurations() {
-                // 이 부분의 시간 계산은 스케줄 데이터에 따라 동적으로 계산되거나,
-                // 스케줄 데이터가 고정적일 경우 수동으로 업데이트될 수 있습니다.
-                // 현재는 기존에 명시된 시간을 기준으로 합니다.
+                // 시간 계산은 스케줄 데이터에 따라 동적으로 계산되거나, 필요시 수동 업데이트
                 return {
                     '치료': 4 * 60, 
                     '학습': 4 * 60, 
@@ -1034,10 +1027,14 @@
             setupAudio(); 
             renderTabs(); 
             // Initial render of schedule for the current day
+            // This is crucial for initial display of current day's schedule without user interaction
             const initialDayIndex = new Date().getDay();
             const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
             currentActiveDay = daysOfWeek[initialDayIndex];
             renderSchedule(currentActiveDay); 
+            // Set the data-attribute for current day on initial render
+            scheduleContent.dataset.currentDay = currentActiveDay;
+
             exploreScheduleContent.classList.add('hidden'); 
             renderWeeklyChart(); 
 
