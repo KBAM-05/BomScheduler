@@ -28,9 +28,14 @@
         <header class="text-center mb-8 relative">
             <h1 class="text-3xl sm:text-4xl font-bold text-[#3B666B] mb-2">우리아이 맞춤 주간 스케줄러</h1>
             <p class="text-lg text-gray-600">아이의 하루를 사랑과 계획으로 채워주세요</p>
-            <button id="manage-schedule-btn" title="전체 일정 관리" class="absolute top-0 right-0 bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-            </button>
+            <div class="absolute top-0 right-0 flex gap-2">
+                <button id="fullscreen-btn" title="전체 화면" class="bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
+                </button>
+                <button id="manage-schedule-btn" title="전체 일정 관리" class="bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.096 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                </button>
+            </div>
         </header>
 
         <main class="lg:grid lg:grid-cols-3 lg:gap-8">
@@ -108,6 +113,7 @@
                 '토': [{ time: '09:30', activity: '기상 및 아침 식사', description: '활기찬 토요일 아침!', category: '기본생활', icon: '☀️' }, { time: '10:30', activity: '주간 학습 되돌아보기', description: '놀이처럼 재미있게 복습해요.', category: '학습', icon: '📚' }, { time: '11:10', activity: '함께 책 읽기', description: '좋아하는 책을 함께 읽어요.', category: '독서', icon: '📖' }, { time: '12:30', activity: '점심 식사', description: '맛있는 점심으로 에너지 충전!', category: '기본생활', icon: '🍽️' }, { time: '14:00', activity: '아이 맞춤 놀이', description: '소근육, 인지 능력 향상을 위한 놀이.', category: '치료', icon: '🧩' }, { time: '15:00', activity: '야외 활동', description: '공원, 놀이터 등에서 신나게 놀아요.', category: '놀이', icon: '🪁' }, { time: '17:30', activity: '집으로 와서 휴식', description: '편안하게 쉬는 시간을 가져요.', category: '휴식', icon: '🏠' }, { time: '18:30', activity: '저녁 식사', description: '온 가족이 모여 즐거운 저녁 시간.', category: '기본생활', icon: '🍽️' }, { time: '19:30', activity: '가족과 함께하는 시간', description: '재미있는 보드게임이나 영화 보기.', category: '놀이', icon: '👨‍👩‍👧‍👦' }, { time: '21:30', activity: '취침 준비', description: '즐거웠던 하루를 마무리하고 잠자리에 들어요.', category: '기본생활', icon: '씻기' }, ],
                 '일': [{ time: '10:00', activity: '느긋한 아침 식사', description: '여유로운 일요일 아침을 맞이해요.', category: '기본생활', icon: '☀️' }, { time: '11:00', activity: '놀이로 배우는 학습', description: '보드게임, 퍼즐 등으로 학습해요.', category: '학습', icon: '🎲' }, { time: '12:30', activity: '점심 식사', description: '간단하고 맛있는 점심을 즐겨요.', category: '기본생활', icon: '🍽️' }, { time: '14:00', activity: '낮잠 또는 조용한 휴식', description: '좋아하는 책을 읽거나 낮잠 자기.', category: '휴식', icon: '📖' }, { time: '15:30', activity: '아이 맞춤 놀이', description: '아이가 좋아하는 편안한 놀이를 해요.', category: '놀이', icon: '🧸' }, { time: '17:00', activity: '다음 주 준비', description: '새로운 한 주를 위해 준비물을 챙겨요.', category: '기본생활', icon: '📅' }, { time: '18:30', activity: '저녁 식사', description: '새로운 한 주를 기대하며 맛있는 저녁!', category: '기본생활', icon: '🍽️' }, { time: '20:00', activity: '목욕 및 자유 시간', description: '따뜻한 물로 목욕하고 편안하게 쉬어요.', category: '휴식', icon: '🛁' }, { time: '21:30', activity: '취침 준비', description: '차분하게 하루를 마무리하고 일찍 잠자리에 들어요.', category: '기본생활', icon: '씻기' }, ]
             };
+
             const scheduleContent = document.getElementById('schedule-content');
             const dayTabsContainer = document.getElementById('day-tabs');
             const exploreDayTabsContainer = document.getElementById('explore-day-tabs');
@@ -126,32 +132,33 @@
             }
             function playClapSound() { if (clapSynth) clapSynth.triggerAttackRelease("8n"); }
             function playAlarmSound() { if (alarmSynth) alarmSynth.triggerAttackRelease("C5", "8n"); }
+            function speak(text) { if ('speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(text); u.lang = 'ko-KR'; window.speechSynthesis.speak(u); } }
 
             function handleAlarms() {
                 const now = new Date();
                 const nowMinutes = now.getHours() * 60 + now.getMinutes();
                 const currentSchedule = scheduleData[currentActiveDay] || [];
                 currentSchedule.forEach(item => {
-                    if (item.alarmType === 'continuous' && !item.completed) {
-                        if (nowMinutes >= timeToMinutes(item.time)) {
-                            playAlarmSound();
-                        }
+                    const itemStartTimeMinutes = timeToMinutes(item.time);
+                    if (!item.completed) {
+                        if (item.alarmType === 'continuous' && nowMinutes >= itemStartTimeMinutes) { playAlarmSound(); }
+                        if (!item.notified_start && nowMinutes >= itemStartTimeMinutes && nowMinutes < itemStartTimeMinutes + 1) { speak(`${item.activity} 시작할 시간입니다.`); item.notified_start = true; }
                     }
                 });
             }
 
             function loadScheduleState() {
-                const savedData = localStorage.getItem('childSchedulerData_final_v3');
+                const savedData = localStorage.getItem('childSchedulerData_final_v4');
                 if (savedData) { scheduleData = JSON.parse(savedData); } 
                 else {
                     Object.keys(defaultSchedule).forEach(day => {
-                        scheduleData[day] = defaultSchedule[day].map(activity => ({...activity, description: activity.description || '', completed: false, alarmType: activity.alarmType || 'none'}));
+                        scheduleData[day] = defaultSchedule[day].map(activity => ({...activity, completed: false, alarmType: activity.alarmType || 'none', notified_start: false}));
                     });
                 }
             }
-            function saveScheduleState() { localStorage.setItem('childSchedulerData_final_v3', JSON.stringify(scheduleData)); }
+            function saveScheduleState() { localStorage.setItem('childSchedulerData_final_v4', JSON.stringify(scheduleData)); }
             function timeToMinutes(timeStr) { if (!timeStr || !timeStr.includes(':')) return 0; const [h, m] = timeStr.split(':').map(Number); return h * 60 + m; }
-            function formatTimeForDisplay(timeStr) { if (!timeStr || !timeStr.includes(':')) return timeStr; let [h, m] = timeStr.split(':'); const ampm = h >= 12 ? '오후' : '오전'; h = h % 12 || 12; return `${ampm} ${h.toString().padStart(2, '0')}:${m}`; }
+            function formatTimeForDisplay(timeStr) { if (!timeStr || !timeStr.includes(':')) return timeStr; let [h, m] = timeStr.split(':'); const ampm = h >= 12 ? '오후' : '오전'; h = parseInt(h, 10) % 12 || 12; return `${ampm} ${h}:${m}`; }
 
             function openModal(day, index = -1) {
                 document.getElementById('modalDay').value = day;
@@ -174,11 +181,13 @@
             function saveActivity() {
                 const day = document.getElementById('modalDay').value;
                 const index = parseInt(document.getElementById('modalIndex').value, 10);
+                const activityName = document.getElementById('modalActivity').value.trim();
                 const newActivity = {
-                    time: document.getElementById('modalTime').value, activity: document.getElementById('modalActivity').value.trim(), description: document.getElementById('modalDescription').value.trim(),
+                    time: document.getElementById('modalTime').value, activity: activityName, description: document.getElementById('modalDescription').value.trim(),
                     category: document.getElementById('modalCategory').value, icon: document.getElementById('modalIcon').value.trim() || '📝',
                     completed: index === -1 ? false : scheduleData[day][index].completed,
-                    alarmType: (document.getElementById('modalActivity').value.trim().includes('기상') || document.getElementById('modalActivity').value.trim().includes('준비')) ? 'continuous' : 'none'
+                    alarmType: (activityName.includes('기상') || activityName.includes('준비')) ? 'continuous' : 'none',
+                    notified_start: false
                 };
                 if (!newActivity.time || !newActivity.activity) { alert('시간과 활동 이름은 필수 항목입니다.'); return; }
                 if (index === -1) { scheduleData[day].push(newActivity); } else { scheduleData[day][index] = newActivity; }
@@ -233,45 +242,44 @@
             }
 
             function renderChart(canvasId, chartInstance, type, data, options) {
-                if (!document.getElementById(canvasId)) return null;
-                const ctx = document.getElementById(canvasId).getContext('2d');
+                const canvas = document.getElementById(canvasId);
+                if (!canvas) return null;
+                const ctx = canvas.getContext('2d');
                 if (chartInstance) chartInstance.destroy();
                 return new Chart(ctx, { type, data, options });
+            }
+            function calculateWeeklyStickers(activities) {
+                if (!activities || activities.length === 0) return 0;
+                const completionRate = activities.filter(a => a.completed).length / activities.length;
+                if (completionRate >= 0.9) return 5; if (completionRate >= 0.7) return 3; if (completionRate >= 0.5) return 1; return 0;
+            }
+            function calculateDailyStickers(activities) {
+                if (!activities || activities.length === 0) return 0;
+                const completionRate = activities.filter(a => a.completed).length / activities.length;
+                if (completionRate >= 0.9) return 3; if (completionRate >= 0.7) return 2; if (completionRate >= 0.5) return 1; return 0;
             }
 
             function updateAnalytics() {
                 const allActivities = Object.values(scheduleData).flat();
-                const completedWeekly = allActivities.filter(a => a.completed).length;
                 document.getElementById('total-activities-weekly').textContent = allActivities.length;
-                document.getElementById('completed-activities-weekly').textContent = completedWeekly;
-                document.getElementById('sticker-count-weekly').textContent = calculateStickers(allActivities);
+                document.getElementById('completed-activities-weekly').textContent = allActivities.filter(a => a.completed).length;
+                document.getElementById('sticker-count-weekly').textContent = calculateWeeklyStickers(allActivities);
                 
                 const todaySchedule = scheduleData[currentActiveDay] || [];
-                const completedDaily = todaySchedule.filter(a => a.completed).length;
                 document.getElementById('daily-analysis-day').textContent = currentActiveDay;
                 document.getElementById('total-activities-daily').textContent = todaySchedule.length;
-                document.getElementById('completed-activities-daily').textContent = completedDaily;
-                document.getElementById('sticker-count-daily').textContent = calculateStickers(todaySchedule);
+                document.getElementById('completed-activities-daily').textContent = todaySchedule.filter(a => a.completed).length;
+                document.getElementById('sticker-count-daily').textContent = calculateDailyStickers(todaySchedule);
                 
-                const weeklyDurations = getCategoryDurations(allActivities);
                 weeklyActivityChart = renderChart('weeklyActivityChart', weeklyActivityChart, 'bar', {
-                    labels: Object.keys(weeklyDurations), datasets: [{ label: '주간 활동 시간 (분)', data: Object.values(weeklyDurations), backgroundColor: Object.values(categoryColors) }]
+                    labels: Object.keys(categoryColors), datasets: [{ data: Object.values(getCategoryDurations(allActivities)), backgroundColor: Object.values(categoryColors) }]
                 }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } });
 
-                const dailyDurations = getCategoryDurations(todaySchedule);
                 dailyActivityChart = renderChart('dailyActivityChart', dailyActivityChart, 'bar', {
-                    labels: Object.keys(dailyDurations), datasets: [{ label: `${currentActiveDay} 활동 시간 (분)`, data: Object.values(dailyDurations), backgroundColor: Object.values(categoryColors) }]
+                    labels: Object.keys(categoryColors), datasets: [{ data: Object.values(getCategoryDurations(todaySchedule)), backgroundColor: Object.values(categoryColors) }]
                 }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } });
             }
-            
-            function calculateStickers(activities) {
-                if (!activities || activities.length === 0) return 0;
-                const completionRate = activities.filter(a => a.completed).length / activities.length;
-                if (completionRate >= 0.95) return 5; if (completionRate >= 0.7) return 3; if (completionRate >= 0.5) return 1; return 0;
-            }
-
-            function renderAll() { renderTabs(); renderSchedule(currentActiveDay); renderExploreSchedule(currentActiveDay); updateAnalytics(); }
-
+            function renderAll() { renderTabs(); renderSchedule(currentActiveDay); updateCurrentActivityHighlight(); updateAnalytics(); if (activeExploreDay) { renderExploreSchedule(activeExploreDay); } }
             function updateCurrentActivityHighlight() {
                 document.querySelectorAll('#schedule-content .timeline-item').forEach(el => el.classList.remove('current-activity'));
                 const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
@@ -291,10 +299,9 @@
                 loadScheduleState(); 
                 setupAudio(); 
                 renderAll();
-                updateCurrentActivityHighlight();
 
                 scheduleContent.addEventListener('click', e => {
-                    const check = e.target.dataset.action === 'check' ? e.target : null;
+                    const check = e.target.closest('[data-action="check"]');
                     if (check) {
                         const scheduleItem = check.closest('.timeline-item');
                         const time = scheduleItem.dataset.activityTime;
@@ -308,10 +315,7 @@
                         }
                     }
                 });
-                dayTabsContainer.addEventListener('click', e => {
-                    const day = e.target.dataset.day;
-                    if (day) { currentActiveDay = day; renderAll(); updateCurrentActivityHighlight(); }
-                });
+                dayTabsContainer.addEventListener('click', e => { const day = e.target.dataset.day; if (day && day !== currentActiveDay) { currentActiveDay = day; renderAll(); } });
                 exploreDayTabsContainer.addEventListener('click', e => {
                     const clickedTab = e.target.closest('button');
                     if (!clickedTab || !clickedTab.dataset.day) return;
@@ -329,7 +333,7 @@
                 });
                 managementContent.addEventListener('click', e => {
                     const button = e.target.closest('button');
-                    if (!button) return;
+                    if (!button || !button.dataset.action) return;
                     const { action, day, index } = button.dataset;
                     if (action === 'add') openModal(day);
                     if (action === 'edit') openModal(day, parseInt(index));
@@ -339,18 +343,17 @@
                 document.getElementById('close-management-btn').addEventListener('click', closeModal);
                 document.getElementById('saveButton').addEventListener('click', saveActivity);
                 document.getElementById('cancelButton').addEventListener('click', closeModal);
-                document.getElementById('weekly-analysis-tab').addEventListener('click', () => {
-                    document.getElementById('weekly-analysis-content').classList.remove('hidden');
+                document.getElementById('weekly-analysis-tab').addEventListener('click', e => {
                     document.getElementById('daily-analysis-content').classList.add('hidden');
-                    document.getElementById('weekly-analysis-tab').classList.replace('analysis-tab-inactive', 'analysis-tab-active');
-                    document.getElementById('daily-analysis-tab').classList.replace('analysis-tab-active', 'analysis-tab-inactive');
+                    document.getElementById('weekly-analysis-content').classList.remove('hidden');
+                    e.currentTarget.classList.add('analysis-tab-active');
+                    document.getElementById('daily-analysis-tab').classList.remove('analysis-tab-active');
                 });
-                document.getElementById('daily-analysis-tab').addEventListener('click', () => {
-                    document.getElementById('daily-analysis-content').classList.remove('hidden');
+                document.getElementById('daily-analysis-tab').addEventListener('click', e => {
                     document.getElementById('weekly-analysis-content').classList.add('hidden');
-                    document.getElementById('daily-analysis-tab').classList.replace('analysis-tab-inactive', 'analysis-tab-active');
-                    document.getElementById('weekly-analysis-tab').classList.replace('analysis-tab-active', 'analysis-tab-inactive');
-                    updateAnalytics();
+                    document.getElementById('daily-analysis-content').classList.remove('hidden');
+                    e.currentTarget.classList.add('analysis-tab-active');
+                    document.getElementById('weekly-analysis-tab').classList.remove('analysis-tab-active');
                 });
                 
                 setInterval(() => {
