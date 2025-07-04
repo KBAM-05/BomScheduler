@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>우리아이 맞춤 주간 스케줄러 (최종본)</title>
+    <title>우리아이 맞춤 주간 스케줄러 (최종 완성본)</title>
     <link rel="manifest" href="manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -20,6 +20,7 @@
         .completed-activity .activity-text { text-decoration: line-through; color: #9CA3AF; }
         #schedule-content-explore, #schedule-content { max-height: 500px; overflow-y: auto; padding-right: 10px; }
         #editModal.hidden, #management-overlay.hidden { display: none; }
+        #wake-lock-toggle:checked + svg { color: #F59E0B; }
     </style>
 </head>
 <body class="antialiased">
@@ -29,6 +30,10 @@
             <h1 class="text-3xl sm:text-4xl font-bold text-[#3B666B] mb-2">우리아이 맞춤 주간 스케줄러</h1>
             <p class="text-lg text-gray-600">아이의 하루를 사랑과 계획으로 채워주세요</p>
             <div class="absolute top-0 right-0 flex gap-2">
+                <label id="wake-lock-label" for="wake-lock-toggle" title="화면 항상 켜기" class="hidden cursor-pointer bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition">
+                    <input type="checkbox" id="wake-lock-toggle" class="hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
+                </label>
                 <button id="fullscreen-btn" title="전체 화면" class="bg-white p-3 rounded-full shadow-md hover:bg-gray-100 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 1v4m0 0h-4m4 0l-5-5" /></svg>
                 </button>
@@ -113,7 +118,6 @@
                 '토': [{ time: '09:30', activity: '기상 및 아침 식사', description: '활기찬 토요일 아침!', category: '기본생활', icon: '☀️' }, { time: '10:30', activity: '주간 학습 되돌아보기', description: '놀이처럼 재미있게 복습해요.', category: '학습', icon: '📚' }, { time: '11:10', activity: '함께 책 읽기', description: '좋아하는 책을 함께 읽어요.', category: '독서', icon: '📖' }, { time: '12:30', activity: '점심 식사', description: '맛있는 점심으로 에너지 충전!', category: '기본생활', icon: '🍽️' }, { time: '14:00', activity: '아이 맞춤 놀이', description: '소근육, 인지 능력 향상을 위한 놀이.', category: '치료', icon: '🧩' }, { time: '15:00', activity: '야외 활동', description: '공원, 놀이터 등에서 신나게 놀아요.', category: '놀이', icon: '🪁' }, { time: '17:30', activity: '집으로 와서 휴식', description: '편안하게 쉬는 시간을 가져요.', category: '휴식', icon: '🏠' }, { time: '18:30', activity: '저녁 식사', description: '온 가족이 모여 즐거운 저녁 시간.', category: '기본생활', icon: '🍽️' }, { time: '19:30', activity: '가족과 함께하는 시간', description: '재미있는 보드게임이나 영화 보기.', category: '놀이', icon: '👨‍👩‍👧‍👦' }, { time: '21:30', activity: '취침 준비', description: '즐거웠던 하루를 마무리하고 잠자리에 들어요.', category: '기본생활', icon: '씻기' }, ],
                 '일': [{ time: '10:00', activity: '느긋한 아침 식사', description: '여유로운 일요일 아침을 맞이해요.', category: '기본생활', icon: '☀️' }, { time: '11:00', activity: '놀이로 배우는 학습', description: '보드게임, 퍼즐 등으로 학습해요.', category: '학습', icon: '🎲' }, { time: '12:30', activity: '점심 식사', description: '간단하고 맛있는 점심을 즐겨요.', category: '기본생활', icon: '🍽️' }, { time: '14:00', activity: '낮잠 또는 조용한 휴식', description: '좋아하는 책을 읽거나 낮잠 자기.', category: '휴식', icon: '📖' }, { time: '15:30', activity: '아이 맞춤 놀이', description: '아이가 좋아하는 편안한 놀이를 해요.', category: '놀이', icon: '🧸' }, { time: '17:00', activity: '다음 주 준비', description: '새로운 한 주를 위해 준비물을 챙겨요.', category: '기본생활', icon: '📅' }, { time: '18:30', activity: '저녁 식사', description: '새로운 한 주를 기대하며 맛있는 저녁!', category: '기본생활', icon: '🍽️' }, { time: '20:00', activity: '목욕 및 자유 시간', description: '따뜻한 물로 목욕하고 편안하게 쉬어요.', category: '휴식', icon: '🛁' }, { time: '21:30', activity: '취침 준비', description: '차분하게 하루를 마무리하고 일찍 잠자리에 들어요.', category: '기본생활', icon: '씻기' }, ]
             };
-
             const scheduleContent = document.getElementById('schedule-content');
             const dayTabsContainer = document.getElementById('day-tabs');
             const exploreDayTabsContainer = document.getElementById('explore-day-tabs');
@@ -124,6 +128,7 @@
             let currentActiveDay = '월';
             let activeExploreDay = null;
             let clapSynth, alarmSynth, weeklyActivityChart, dailyActivityChart;
+            let wakeLock = null;
 
             async function setupAudio() {
                 if (Tone.context.state !== 'running') await Tone.start();
@@ -158,7 +163,7 @@
             }
             function saveScheduleState() { localStorage.setItem('childSchedulerData_final_v4', JSON.stringify(scheduleData)); }
             function timeToMinutes(timeStr) { if (!timeStr || !timeStr.includes(':')) return 0; const [h, m] = timeStr.split(':').map(Number); return h * 60 + m; }
-            function formatTimeForDisplay(timeStr) { if (!timeStr || !timeStr.includes(':')) return timeStr; let [h, m] = timeStr.split(':'); const ampm = h >= 12 ? '오후' : '오전'; h = parseInt(h, 10) % 12 || 12; return `${ampm} ${h}:${m}`; }
+            function formatTimeForDisplay(timeStr) { if (!timeStr || !timeStr.includes(':')) return timeStr; let [h, m] = timeStr.split(':'); const ampm = h >= 12 ? '오후' : '오전'; h = parseInt(h, 10) % 12 || 12; return `${ampm} ${h}:${m.padStart(2, '0')}`; }
 
             function openModal(day, index = -1) {
                 document.getElementById('modalDay').value = day;
@@ -186,8 +191,7 @@
                     time: document.getElementById('modalTime').value, activity: activityName, description: document.getElementById('modalDescription').value.trim(),
                     category: document.getElementById('modalCategory').value, icon: document.getElementById('modalIcon').value.trim() || '📝',
                     completed: index === -1 ? false : scheduleData[day][index].completed,
-                    alarmType: (activityName.includes('기상') || activityName.includes('준비')) ? 'continuous' : 'none',
-                    notified_start: false
+                    alarmType: (activityName.includes('기상') || activityName.includes('준비')) ? 'continuous' : 'none', notified_start: false
                 };
                 if (!newActivity.time || !newActivity.activity) { alert('시간과 활동 이름은 필수 항목입니다.'); return; }
                 if (index === -1) { scheduleData[day].push(newActivity); } else { scheduleData[day][index] = newActivity; }
@@ -256,30 +260,26 @@
             function calculateDailyStickers(activities) {
                 if (!activities || activities.length === 0) return 0;
                 const completionRate = activities.filter(a => a.completed).length / activities.length;
-                if (completionRate >= 0.9) return 3; if (completionRate >= 0.7) return 2; if (completionRate >= 0.5) return 1; return 0;
+                if (completionRate >= 0.95) return 3; if (completionRate >= 0.7) return 2; if (completionRate >= 0.5) return 1; return 0;
             }
-
             function updateAnalytics() {
                 const allActivities = Object.values(scheduleData).flat();
                 document.getElementById('total-activities-weekly').textContent = allActivities.length;
                 document.getElementById('completed-activities-weekly').textContent = allActivities.filter(a => a.completed).length;
                 document.getElementById('sticker-count-weekly').textContent = calculateWeeklyStickers(allActivities);
-                
                 const todaySchedule = scheduleData[currentActiveDay] || [];
                 document.getElementById('daily-analysis-day').textContent = currentActiveDay;
                 document.getElementById('total-activities-daily').textContent = todaySchedule.length;
                 document.getElementById('completed-activities-daily').textContent = todaySchedule.filter(a => a.completed).length;
                 document.getElementById('sticker-count-daily').textContent = calculateDailyStickers(todaySchedule);
-                
                 weeklyActivityChart = renderChart('weeklyActivityChart', weeklyActivityChart, 'bar', {
                     labels: Object.keys(categoryColors), datasets: [{ data: Object.values(getCategoryDurations(allActivities)), backgroundColor: Object.values(categoryColors) }]
                 }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } });
-
                 dailyActivityChart = renderChart('dailyActivityChart', dailyActivityChart, 'bar', {
                     labels: Object.keys(categoryColors), datasets: [{ data: Object.values(getCategoryDurations(todaySchedule)), backgroundColor: Object.values(categoryColors) }]
                 }, { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } });
             }
-            function renderAll() { renderTabs(); renderSchedule(currentActiveDay); updateCurrentActivityHighlight(); updateAnalytics(); if (activeExploreDay) { renderExploreSchedule(activeExploreDay); } }
+            function renderAll() { renderTabs(); renderSchedule(currentActiveDay); updateCurrentActivityHighlight(); updateAnalytics(); if (activeExploreDay) renderExploreSchedule(activeExploreDay); }
             function updateCurrentActivityHighlight() {
                 document.querySelectorAll('#schedule-content .timeline-item').forEach(el => el.classList.remove('current-activity'));
                 const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
@@ -294,6 +294,8 @@
                     if (el) { el.classList.add('current-activity'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
                 }
             }
+            const requestWakeLock = async () => { try { wakeLock = await navigator.wakeLock.request('screen'); } catch (err) { console.error(`${err.name}, ${err.message}`); } };
+            const handleVisibilityChange = async () => { if (wakeLock !== null && document.visibilityState === 'visible') { await requestWakeLock(); } };
             
             function initializeApp() {
                 loadScheduleState(); 
@@ -301,13 +303,12 @@
                 renderAll();
 
                 scheduleContent.addEventListener('click', e => {
-                    const check = e.target.closest('[data-action="check"]');
-                    if (check) {
-                        const scheduleItem = check.closest('.timeline-item');
+                    if (e.target.dataset.action === 'check') {
+                        const scheduleItem = e.target.closest('.timeline-item');
                         const time = scheduleItem.dataset.activityTime;
                         const activity = scheduleData[currentActiveDay].find(item => item.time === time);
                         if (activity) {
-                            activity.completed = check.checked;
+                            activity.completed = e.target.checked;
                             scheduleItem.classList.toggle('completed-activity', activity.completed);
                             if (activity.completed) playClapSound();
                             saveScheduleState();
@@ -336,13 +337,24 @@
                     if (!button || !button.dataset.action) return;
                     const { action, day, index } = button.dataset;
                     if (action === 'add') openModal(day);
-                    if (action === 'edit') openModal(day, parseInt(index));
-                    if (action === 'delete') deleteActivity(day, parseInt(index));
+                    else if (action === 'edit') openModal(day, parseInt(index));
+                    else if (action === 'delete') deleteActivity(day, parseInt(index));
                 });
                 document.getElementById('manage-schedule-btn').addEventListener('click', () => { renderManagementView(); managementOverlay.classList.remove('hidden'); });
                 document.getElementById('close-management-btn').addEventListener('click', closeModal);
                 document.getElementById('saveButton').addEventListener('click', saveActivity);
                 document.getElementById('cancelButton').addEventListener('click', closeModal);
+                document.getElementById('fullscreen-btn').addEventListener('click', () => { if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); } else if (document.exitFullscreen) { document.exitFullscreen(); } });
+                const wakeLockLabel = document.getElementById('wake-lock-label');
+                const wakeLockToggle = document.getElementById('wake-lock-toggle');
+                if ('wakeLock' in navigator) {
+                    wakeLockLabel.classList.remove('hidden');
+                    wakeLockToggle.addEventListener('change', async () => {
+                        if (wakeLockToggle.checked) { await requestWakeLock(); } 
+                        else { if (wakeLock) { wakeLock.release(); wakeLock = null; } }
+                    });
+                    document.addEventListener('visibilitychange', handleVisibilityChange);
+                }
                 document.getElementById('weekly-analysis-tab').addEventListener('click', e => {
                     document.getElementById('daily-analysis-content').classList.add('hidden');
                     document.getElementById('weekly-analysis-content').classList.remove('hidden');
